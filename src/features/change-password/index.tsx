@@ -62,7 +62,7 @@ export default function ChangePasswordPage() {
   }
 
   return (
-    <div className="container max-w-2xl py-10">
+    <div className="container mx-auto max-w-2xl py-10">
       <Button variant="ghost" className="mb-4 flex items-center gap-2" onClick={() => router.back()}>
         <ArrowLeft className="h-4 w-4" />
         Back to Profile
