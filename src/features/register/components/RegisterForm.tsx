@@ -23,9 +23,17 @@ export function RegisterForm({
   const { mutateAsync: register, isPending } = useRegister();
 
   const formik = useFormik({
-    initialValues: { fullName: "", email: "", phoneNumber: "", password: "" },
+    initialValues: {
+      fullName: "",
+      email: "",
+      phoneNumber: "",
+      password: "",
+      confirmPassword: "",
+      referralCodeUsed: "",
+      role:"USER"
+    },
     validationSchema: RegisterSchema,
-    onSubmit: async (values) => {      
+    onSubmit: async (values) => {
       await register(values);
     },
   });
@@ -82,7 +90,7 @@ export function RegisterForm({
                   id="phoneNumber"
                   name="phoneNumber"
                   type="text"
-                  placeholder="08123456789"
+                  placeholder="Enter phone number"
                   required
                   value={formik.values.phoneNumber}
                   onChange={formik.handleChange}
@@ -113,6 +121,50 @@ export function RegisterForm({
                     {formik.errors.password}
                   </p>
                 )}
+              </div>
+              <div className="grid gap-2">
+                <div className="flex items-center">
+                  <Label htmlFor="confirmPassword">Confirm Password</Label>
+                </div>
+                <Input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  placeholder="password"
+                  required
+                  value={formik.values.confirmPassword}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.confirmPassword &&
+                  !!formik.errors.confirmPassword && (
+                    <p className="text-xs text-red-500">
+                      {formik.errors.confirmPassword}
+                    </p>
+                  )}
+              </div>
+              <div className="grid gap-2">
+                <div className="flex items-center">
+                  <Label htmlFor="referralCodeUsed">
+                    Referral Code (Optional)
+                  </Label>
+                </div>
+                <Input
+                  id="referralCodeUsedF"
+                  name="referralCodeUsed"
+                  type="text"
+                  placeholder="referral code"
+                  required
+                  value={formik.values.referralCodeUsed}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.referralCodeUsed &&
+                  !!formik.errors.referralCodeUsed && (
+                    <p className="text-xs text-red-500">
+                      {formik.errors.referralCodeUsed}
+                    </p>
+                  )}
               </div>
               <Button type="submit" className="w-full" disabled={isPending}>
                 {isPending ? "Loading" : "Register"}

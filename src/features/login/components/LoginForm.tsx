@@ -15,12 +15,19 @@ import { useFormik } from "formik";
 import Link from "next/link";
 import { LoginSchema } from "../schema";
 import useLogin from "@/hooks/auth/useLogin";
+import { useId, useState } from "react";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
   const { mutateAsync: login, isPending } = useLogin();
+
+  const id = useId();
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+
+  const toggleVisibility = () => setIsVisible((prevState) => !prevState);
 
   const formik = useFormik({
     initialValues: { email: "", password: "" },
@@ -58,24 +65,39 @@ export function LoginForm({
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor={id}>Show/hide password input</Label>
                 </div>
-
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  placeholder="Your Password"
-                  required
-                  value={formik.values.password}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                {formik.touched.password && !!formik.errors.password && (
-                  <p className="text-xs text-red-500">
-                    {formik.errors.password}
-                  </p>
-                )}
+                <div className="relative">
+                  <Input
+                    id="password"
+                    name="password"
+                    type={isVisible ? "text" : "password"}
+                    placeholder="Your Password"
+                    required
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                  <button
+                    className="text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+                    type="button"
+                    onClick={toggleVisibility}
+                    aria-label={isVisible ? "Hide password" : "Show password"}
+                    aria-pressed={isVisible}
+                    aria-controls="password"
+                  >
+                    {isVisible ? (
+                      <EyeOffIcon size={16} aria-hidden="true" />
+                    ) : (
+                      <EyeIcon size={16} aria-hidden="true" />
+                    )}
+                  </button>
+                  {formik.touched.password && !!formik.errors.password && (
+                    <p className="text-xs text-red-500">
+                      {formik.errors.password}
+                    </p>
+                  )}
+                </div>
               </div>
               <Button type="submit" className="w-full" disabled={isPending}>
                 {isPending ? "Loading" : "Login"}
@@ -85,6 +107,14 @@ export function LoginForm({
               Do not have an account?{" "}
               <Link href="/register" className="underline underline-offset-4">
                 Sign up
+              </Link>
+            </div>
+            <div className="mt-4 text-center text-sm">
+              <Link
+                href="/organizer/register-organizer"
+                className="underline underline-offset-4"
+              >
+                Register as organizer
               </Link>
             </div>
           </form>

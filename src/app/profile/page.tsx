@@ -6,6 +6,7 @@ const Profile = async () => {
       const session = await auth();
       
       if (!session) return redirect("/login");
+      
   return <ProfilePage />;
 };
 

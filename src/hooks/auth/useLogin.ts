@@ -1,10 +1,11 @@
 "use client";
 
-
+import { auth } from "@/lib/auth";
 import { axiosInstance } from "@/lib/axios";
 import { User } from "@/types/user";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { log } from "console";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -20,14 +21,25 @@ const useLogin = () => {
     },
     onSuccess: async (data) => {
       await signIn("credentials", { ...data, redirect: false });
+
+      const role = data.user.role;
+
       toast.success("Login success");
-      // onAuthSuccess({ user: data, accessToken: data.accessToken });
-      router.push("/");
+
+      localStorage.setItem("accessToken", data.accessToken);
+      localStorage.setItem("role", role);
+
+      if (role === "ORGANIZER") {
+        router.push("/organizer/dashboard");
+      } else if (role === "ADMIN") {
+        router.push("/admin/dashboard");
+      } else {
+        router.push("/");
+      }
     },
     onError: (error: AxiosError<any>) => {
       toast.error(error.response?.data.message);
     },
   });
 };
-
 export default useLogin;
