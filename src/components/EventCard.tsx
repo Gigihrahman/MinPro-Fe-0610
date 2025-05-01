@@ -1,17 +1,15 @@
-import Link from "next/link";
-import Image from "next/image";
 import { Calendar, MapPin } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { formatCurrency } from "@/lib/utils";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
 interface EventCardProps {
   slug: string;
   title: string;
   date: string;
   location: string;
-
   image: string;
   category: string;
 }
@@ -21,38 +19,53 @@ export default function EventCard({
   title,
   date,
   location,
-
   image,
   category,
 }: EventCardProps) {
   return (
-    <Card className="overflow-hidden transition-all hover:shadow-md">
-      <Link href={`/events/${slug}`}>
-        <div className="aspect-video w-full overflow-hidden">
-          <Image
-            src={image || "/placeholder.svg"}
-            alt={title}
-            width={300}
-            height={200}
-            className="h-full w-full object-cover transition-transform hover:scale-105"
-          />
+    <Card className="relative bg-white/90 backdrop-blur-sm rounded-lg shadow-md overflow-hidden w-full sm:max-w-md">
+      {/* Image */}
+      <div className="relative w-full h-40 sm:h-48">
+        <Image
+          src={image}
+          alt={title}
+          layout="fill"
+          objectFit="cover"
+          className="rounded-t-lg"
+        />
+      </div>
+
+      <CardContent className="relative z-20 p-6">
+        <div className="flex justify-between items-center">
+          {/* Category Badge */}
+          <Badge className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-1 px-2 rounded-full text-sm">
+            {category}
+          </Badge>
         </div>
-        <CardContent className="p-4">
-          <Badge className="mb-2">{category}</Badge>
-          <h3 className="line-clamp-1 text-xl font-bold">{title}</h3>
-          <div className="text-muted-foreground mt-2 flex items-center text-sm">
-            <Calendar className="mr-1 h-4 w-4" />
-            <span>{date}</span>
-          </div>
-          <div className="text-muted-foreground mt-1 flex items-center text-sm">
-            <MapPin className="mr-1 h-4 w-4" />
-            <span>{location}</span>
-          </div>
-        </CardContent>
-        <CardFooter className="flex items-center justify-between border-t p-4">
-          <Badge variant="outline">View Details</Badge>
-        </CardFooter>
-      </Link>
+
+        {/* Title */}
+        <h2 className="text-2xl font-semibold text-gray-800 mt-2">{title}</h2>
+
+        {/* Date and Location */}
+        <div className="flex items-center text-gray-700 mt-4">
+          <Calendar className="mr-2" />
+          <span className="text-sm">{date}</span>
+        </div>
+        <div className="flex items-center text-gray-700 mt-2">
+          <MapPin className="mr-2" />
+          <span className="text-sm">{location}</span>
+        </div>
+      </CardContent>
+
+      {/* Footer with "View Details" Link */}
+      <CardFooter className="flex justify-center pb-6">
+        <Link
+          href={`/events/${slug}`}
+          className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-2 px-6 rounded-full shadow-lg hover:bg-gradient-to-r hover:from-indigo-700 hover:to-purple-700 transition duration-300"
+        >
+          View Details
+        </Link>
+      </CardFooter>
     </Card>
   );
 }

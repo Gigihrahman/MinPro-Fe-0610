@@ -36,27 +36,29 @@ export default async function DetailPageBody() {
 
         <div className="grid gap-6 lg:grid-cols-3 lg:gap-12">
           <div className="lg:col-span-2">
-            <div className="overflow-hidden rounded-lg">
+            <div className="overflow-hidden rounded-lg shadow-lg">
               <Image
                 src={event.image || "/placeholder.svg"}
                 alt={event.name}
-                width={500} // Ganti dengan lebar yang sesuai
-                height={250} // Ganti dengan tinggi yang sesuai
-                layout="responsive" // Membuat gambar responsif
-                className="object-cover"
+                width={600} // Set a max width for responsiveness
+                height={300} // Set a max height
+                layout="intrinsic" // Keep the image responsive while maintaining its aspect ratio
+                className="object-cover rounded-t-lg w-full max-w-[600px] max-h-[400px]" // Set the image to fill container but not exceed 600px width or 300px height
               />
             </div>
 
             <div className="mt-6">
               <div className="flex flex-wrap items-center gap-2">
-                <Badge>{event.category.name}</Badge>
+                <Badge className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-1 px-3 rounded-full text-sm">
+                  {event.category.name}
+                </Badge>
                 <div className="text-muted-foreground flex items-center text-sm">
                   <Users className="mr-1 h-4 w-4" />
-                  <span>diisi bang hehehe seats available</span>
+                  <span>{event.seats[0].totalSeat} seats available</span>
                 </div>
               </div>
 
-              <h1 className="mt-2 text-3xl font-bold tracking-tight md:text-4xl">
+              <h1 className="mt-2 text-3xl font-bold tracking-tight md:text-4xl text-gray-900">
                 {event.name}
               </h1>
 
@@ -76,65 +78,49 @@ export default async function DetailPageBody() {
               </div>
 
               <div className="mt-4 flex items-center">
-                <div className="flex items-center">
-                  {/* <Image
-                    src={event.organizer.logo || "/placeholder.svg"}
-                    alt={event.organizer.name}
-                    width={40}
-                    height={40}
-                    className="rounded-full"
-                  /> */}
-                  <div className="ml-2">
-                    <p className="text-sm font-medium">
-                      {event.organizer.name}
-                    </p>
-                    <div className="flex items-center">
-                      <Star className="mr-1 h-3 w-3 fill-amber-500 text-amber-500" />
-                      {/* <span className="text-xs">
-                        {event.organizer.rating} • {event.organizer.eventCount}{" "}
-                        events
-                      </span>
-                    </div> */}
-                    </div>
+                <div className="ml-2">
+                  <p className="text-sm font-medium">{event.organizer.name}</p>
+                  <div className="flex items-center">
+                    <Star className="mr-1 h-3 w-3 fill-amber-500 text-amber-500" />
                   </div>
-                  <Link
-                    href={`/organizers/${event.organizer.name}`}
-                    className="ml-auto"
-                  >
-                    <Button variant="outline" size="sm">
-                      View Organizer
-                    </Button>
-                  </Link>
                 </div>
-
-                <Tabs defaultValue="details" className="mt-6">
-                  <TabsList className="grid w-full grid-cols-3">
-                    <TabsTrigger value="details">Details</TabsTrigger>
-                    <TabsTrigger value="location">Location</TabsTrigger>
-                    <TabsTrigger value="reviews">Reviews</TabsTrigger>
-                  </TabsList>
-                  <TabsContent value="details" className="mt-4 space-y-4">
-                    <div className="bg-muted/50 rounded-lg border p-4">
-                      <h3 className="font-medium">{event.city.name}</h3>
-                      <p className="text-muted-foreground text-sm">
-                        {event.description}
-                      </p>
-                    </div>
-                  </TabsContent>
-                  <TabsContent value="location" className="mt-4">
-                    <div className="bg-muted/50 rounded-lg border p-4">
-                      <h3 className="font-medium">{event.city.name}</h3>
-                      <p className="text-muted-foreground text-sm">
-                        {event.locationDetail}
-                      </p>
-                    </div>
-                  </TabsContent>
-                </Tabs>
+                <Link
+                  href={`/organizers/${event.organizer.name}`}
+                  className="ml-auto"
+                >
+                  <Button variant="outline" size="sm">
+                    View Organizer
+                  </Button>
+                </Link>
               </div>
+
+              <Tabs defaultValue="details" className="mt-6">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="details">Details</TabsTrigger>
+                  <TabsTrigger value="location">Location</TabsTrigger>
+                </TabsList>
+                <TabsContent value="details" className="mt-4 space-y-4">
+                  <div className="bg-muted/50 rounded-lg border p-4">
+                    <h3 className="font-medium">{event.city.name}</h3>
+                    <p className="text-muted-foreground text-sm">
+                      {event.description}
+                    </p>
+                  </div>
+                </TabsContent>
+                <TabsContent value="location" className="mt-4">
+                  <div className="bg-muted/50 rounded-lg border p-4">
+                    <h3 className="font-medium">{event.city.name}</h3>
+                    <p className="text-muted-foreground text-sm">
+                      {event.locationDetail}
+                    </p>
+                  </div>
+                </TabsContent>
+              </Tabs>
             </div>
           </div>
+
           <div className="lg:row-start-1">
-            <div className="sticky top-20 rounded-lg border bg-card p-4 shadow-sm">
+            <div className="sticky top-20 rounded-lg border bg-card p-4 shadow-lg">
               <div className="mb-4 flex items-center justify-between">
                 <div className="flex items-center text-sm text-muted-foreground">
                   <Tag className="mr-1 h-4 w-4" />
@@ -143,22 +129,6 @@ export default async function DetailPageBody() {
               </div>
 
               <TicketSelection tickets={event.seats} />
-              {/* <TicketSelection
-                tickets={event.seats}
-                onChange={(selectedTickets) => {
-                  // Calculate subtotal based on selected tickets
-                  const total = Object.entries(selectedTickets).reduce(
-                    (sum, [id, quantity]) => {
-                      const ticket = event.seats.find(
-                        (t) => t.id === Number(id)
-                      );
-                      return sum + (ticket?.price || 0) * quantity;
-                    },
-                    0
-                  );
-                  setSubtotal(total);
-                }}
-              /> */}
 
               <div className="mt-6 space-y-2">
                 <Button className="w-full">Buy Tickets</Button>

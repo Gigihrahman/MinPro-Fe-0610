@@ -1,312 +1,121 @@
 "use client";
-
-import { useState, useEffect } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { Search, Grid, List, Filter, Calendar, X, Loader2 } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import EventCard from "@/components/EventCard";
-import EventListItem from "@/components/EventListItem";
-import { Pagination } from "@/components/Pagination";
-import { Separator } from "@/components/ui/separator";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-  SheetFooter,
-  SheetClose,
-} from "@/components/ui/sheet";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
-import { Badge } from "@/components/ui/badge";
-import { Label } from "@/components/ui/label";
-import { formatCurrency } from "@/lib/utils";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar as CalendarComponent } from "@/components/ui/calendar";
-import { format } from "date-fns";
+import CardFilter from "@/features/search/components/CardFilter";
+import React, { useState } from "react";
 
-// Mock data - would come from API in real app
-const events = [
-  {
-    id: "1",
-    title: "Tech Conference 2025",
-    date: "April 20, 2025",
-    location: "Jakarta Convention Center",
-    price: 300000,
-    image: "/placeholder.svg?height=200&width=300",
-    category: "Technology",
-    description:
-      "Join us for the biggest tech conference in Indonesia. Learn from industry experts and network with professionals.",
-    organizer: "TechEvents Indonesia",
-    availableSeats: 250,
-  },
-  {
-    id: "2",
-    title: "Music Festival",
-    date: "May 5, 2025",
-    location: "Senayan, Jakarta",
-    price: 500000,
-    image: "/placeholder.svg?height=200&width=300",
-    category: "Music",
-    description:
-      "A two-day music festival featuring top local and international artists across multiple stages.",
-    organizer: "Sound Productions",
-    availableSeats: 1000,
-  },
-  // More event data...
-];
+const SearchForm = () => {
+  // const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
+  // const [search, setSearch] = useQueryState("search", { defaultValue: "" });
+  // const [selectedCategory, setSelectedCategory] = useQueryState("category", {
+  //   defaultValue: "",
+  // });
 
-const categories = [
-  { value: "all", label: "All Categories" },
-  { value: "music", label: "Music" },
-  { value: "technology", label: "Technology" },
-  // More categories...
-];
+  // const handleCategoryClick = (categoryId: string) => {
+  //   setSelectedCategory(categoryId === "all" ? "" : categoryId);
+  //   setPage(1); // Reset to first page when changing category
+  // };
 
-const locations = [
-  { value: "all", label: "All Locations" },
-  { value: "jakarta", label: "Jakarta" },
-  { value: "bandung", label: "Bandung" },
-  // More locations...
-];
+  // const { data: categories } = useGetCategories();
+  // const [debounchedSearch] = useDebounceValue(search, 500);
 
-export default function SearchForm() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [currentPage, setCurrentPage] = useState(1);
-  const eventsPerPage = 8;
-
-  // Search and filter states
-  const [searchQuery, setSearchQuery] = useState("");
-  const [category, setCategory] = useState("all");
-  const [location, setLocation] = useState("all");
-  const [priceRange, setPriceRange] = useState([0, 500000]);
-  const [showFreeOnly, setShowFreeOnly] = useState(false);
-  const [dateRange, setDateRange] = useState<{
-    from: Date | undefined;
-    to: Date | undefined;
-  }>({
-    from: undefined,
-    to: undefined,
-  });
-
-  // Initialize states from URL params
-  useEffect(() => {
-    const query = searchParams.get("q") || "";
-    const cat = searchParams.get("category") || "all";
-    const loc = searchParams.get("location") || "all";
-    const view = (searchParams.get("view") as "grid" | "list") || "grid";
-    const free = searchParams.get("free") === "true";
-
-    setSearchQuery(query);
-    setCategory(cat);
-    setLocation(loc);
-    setViewMode(view);
-    setShowFreeOnly(free);
-
-    // Simulate API loading
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, [searchParams]);
-
-  // Update URL with current filters
-  const updateSearchParams = () => {
-    const params = new URLSearchParams();
-    if (searchQuery) params.set("q", searchQuery);
-    if (category !== "all") params.set("category", category);
-    if (location !== "all") params.set("location", location);
-    if (viewMode !== "grid") params.set("view", viewMode);
-    if (showFreeOnly) params.set("free", "true");
-
-    router.push(`/search?${params.toString()}`);
-  };
-
-  // Handle search submission
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    updateSearchParams();
-  };
-
-  // Apply all filters
-  const applyFilters = () => {
-    updateSearchParams();
-  };
-
-  // Reset all filters
-  const resetFilters = () => {
-    setSearchQuery("");
-    setCategory("all");
-    setLocation("all");
-    setPriceRange([0, 500000]);
-    setDateRange({ from: undefined, to: undefined });
-    setShowFreeOnly(false);
-
-    router.push("/search");
-  };
-
-  // Filter events based on search query and filters
-  const filteredEvents = events.filter((event) => {
-    const matchesSearch =
-      searchQuery === "" ||
-      event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      event.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      event.organizer.toLowerCase().includes(searchQuery.toLowerCase());
-
-    const matchesCategory =
-      category === "all" ||
-      event.category.toLowerCase() === category.toLowerCase();
-    const matchesLocation =
-      location === "all" ||
-      event.location.toLowerCase().includes(location.toLowerCase());
-    const matchesPrice = showFreeOnly
-      ? event.price === 0
-      : event.price >= priceRange[0] && event.price <= priceRange[1];
-
-    return matchesSearch && matchesCategory && matchesLocation && matchesPrice;
-  });
-
-  // Pagination logic
-  const indexOfLastEvent = currentPage * eventsPerPage;
-  const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
-  const currentEvents = filteredEvents.slice(
-    indexOfFirstEvent,
-    indexOfLastEvent,
-  );
-  const totalPages = Math.ceil(filteredEvents.length / eventsPerPage);
-
+  // const getCategoryName = (categorySlug: string): string => {
+  //   if (categorySlug === "" || categorySlug === "all") return "All Posts";
+  //   if (!categories) return "Unknown Category";
+  //   const foundCategory = categories.find((cat) => cat.slug === categorySlug);
+  //   return foundCategory?.name || "Unknown Category";
+  // };
+  const categories = ["all", "category1", "category2", "category3"];
+  const cities = ["city1", "city2", "city3"];
+  const [city, setCity] = useState<string>("all");
+  const [category, setCategory] = useState<string>("all");
+  console.log(category);
   return (
-    <div className="container py-10">
-      <div className="mb-6 space-y-0.5">
-        <h1 className="text-2xl font-bold tracking-tight">Search Events</h1>
-        <p className="text-muted-foreground">Find the perfect event for you</p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 relative overflow-hidden">
+      {/* Decorative elements using only Tailwind */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-100 rounded-full filter blur-3xl opacity-20"></div>
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-100 rounded-full filter blur-3xl opacity-20"></div>
 
-      {/* Search bar */}
-      <form onSubmit={handleSearch} className="mb-6">
-        <div className="flex flex-col gap-4 sm:flex-row">
-          <div className="relative flex-1">
-            <Search className="text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4" />
-            <Input
-              type="search"
-              placeholder="Search events, organizers, or keywords..."
-              className="w-full pl-8"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-          <div className="flex gap-2">
-            <Button type="submit" className="flex-shrink-0">
-              Search
-            </Button>
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="outline" className="flex-shrink-0">
-                  <Filter className="mr-2 h-4 w-4" />
-                  Filters
-                </Button>
-              </SheetTrigger>
-              <SheetContent className="w-full sm:max-w-md">
-                <SheetHeader>
-                  <SheetTitle>Filter Events</SheetTitle>
-                  <SheetDescription>
-                    Refine your search with these filters
-                  </SheetDescription>
-                </SheetHeader>
-                <div className="space-y-6 py-6">
-                  {/* Category Filter */}
-                  <div className="space-y-2">
-                    <h3 className="text-sm font-medium">Category</h3>
-                    <Select value={category} onValueChange={setCategory}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {categories.map((cat) => (
-                          <SelectItem key={cat.value} value={cat.value}>
-                            {cat.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+      <section className="w-full py-16 relative">
+        <div className="container mx-auto px-4">
+          <h1 className="text-4xl md:text-5xl font-bold mb-8 text-center text-gray-800">
+            Discover Your Next Experience
+          </h1>
+
+          {/* Hero Search Area */}
+          <div className="rounded-xl overflow-hidden shadow-2xl relative mb-16">
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/80 to-purple-900/80 z-10"></div>
+
+            {/* Background Image */}
+
+            {/* Search Content */}
+            <div className="relative z-20 py-16 md:py-24 px-6 md:px-12 flex flex-col items-center">
+              <h2 className="text-white text-2xl md:text-3xl font-light mb-8 text-center">
+                Find the perfect event for your interests
+              </h2>
+
+              <div className="w-full max-w-3xl">
+                {/* Search Input */}
+                <div className="w-full flex justify-center mb-8">
+                  <div className="relative w-full">
+                    <Input
+                      placeholder="Search for events..."
+                      className="w-full bg-white/90 backdrop-blur-sm text-gray-800 px-6 py-4 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-400 text-lg border-0"
+                    />
+                    <button className="absolute right-2 top-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-2 rounded-full w-10 h-10 flex items-center justify-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                        />
+                      </svg>
+                    </button>
                   </div>
-
-                  {/* Location Filter */}
-                  <div className="space-y-2">
-                    <h3 className="text-sm font-medium">Location</h3>
-                    <Select value={location} onValueChange={setLocation}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select location" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {locations.map((loc) => (
-                          <SelectItem key={loc.value} value={loc.value}>
-                            {loc.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Reset and Apply Filters */}
-                  <SheetFooter>
-                    <Button variant="outline" onClick={resetFilters}>
-                      Reset Filters
-                    </Button>
-                    <SheetClose asChild>
-                      <Button onClick={applyFilters}>Apply Filters</Button>
-                    </SheetClose>
-                  </SheetFooter>
                 </div>
-              </SheetContent>
-            </Sheet>
+
+                {/* Filters */}
+                <div className="flex flex-col md:flex-row gap-4 w-full justify-center">
+                  <div className="md:w-1/2 flex justify-center">
+                    <CardFilter
+                      onChange={setCategory}
+                      data={categories}
+                      label="Category"
+                    />
+                  </div>
+                  <div className="md:w-1/2 flex justify-center">
+                    <CardFilter onChange={setCity} data={cities} label="City" />
+                  </div>
+                </div>
+
+                {/* Action Button */}
+                <div className="mt-8 flex justify-center">
+                  <button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-medium py-3 px-10 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105">
+                    Find Events
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Featured Events Heading */}
+          <div className="text-center mb-6">
+            <h2 className="text-2xl md:text-3xl font-semibold text-gray-800">
+              Featured Events
+            </h2>
+            <div className="w-24 h-1 bg-gradient-to-r from-indigo-600 to-purple-600 mx-auto mt-3 rounded-full"></div>
           </div>
         </div>
-      </form>
-
-      {/* Results */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {currentEvents.map((event) => (
-          <EventCard
-            key={event.id}
-            id={event.id}
-            title={event.title}
-            date={event.date}
-            location={event.location}
-            price={event.price}
-            image={event.image}
-            category={event.category}
-          />
-        ))}
-      </div>
-
-      {/* Pagination */}
-      <div className="mt-8 flex justify-center">
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage}
-        />
-      </div>
+      </section>
     </div>
   );
-}
+};
+
+export default SearchForm;

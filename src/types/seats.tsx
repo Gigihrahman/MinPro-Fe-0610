@@ -4,4 +4,5 @@ export interface Seat {
   price: number;
   totalSeat: number;
   reserved: number;
+  description: string;
 }

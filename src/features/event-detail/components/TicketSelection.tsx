@@ -54,8 +54,8 @@ export function TicketSelection({ tickets }: TicketSelectionProps) {
   };
 
   return (
-    <div className="space-y-4">
-      <h3 className="font-medium">Select Tickets</h3>
+    <div className="space-y-4 px-4 sm:px-6 md:px-8">
+      <h3 className="font-medium text-lg sm:text-xl">Select Tickets</h3>
 
       <div className="space-y-2">
         {tickets.map((ticket) => (
@@ -64,8 +64,10 @@ export function TicketSelection({ tickets }: TicketSelectionProps) {
             className="flex items-center justify-between rounded-md p-2 hover:bg-muted/50"
           >
             <div className="space-y-1">
-              <p className="font-medium">{ticket.name}</p>
-              <p className="text-sm text-muted-foreground">{ticket.name}</p>
+              <p className="font-medium text-sm sm:text-base">{ticket.name}</p>
+              <p className="text-xs sm:text-sm text-muted-foreground">
+                {ticket.description}
+              </p>
               <p className="text-sm font-medium">
                 {formatCurrency(ticket.price)}
               </p>
@@ -80,7 +82,7 @@ export function TicketSelection({ tickets }: TicketSelectionProps) {
               >
                 <Minus className="h-4 w-4" />
               </Button>
-              <span className="w-6 text-center">
+              <span className="w-6 text-center text-sm sm:text-base">
                 {selectedTickets[ticket.id] || 0}
               </span>
               <Button
@@ -103,7 +105,7 @@ export function TicketSelection({ tickets }: TicketSelectionProps) {
       {totalTickets > 0 && (
         <>
           <Separator />
-          <div className="flex items-center justify-between font-medium">
+          <div className="flex items-center justify-between font-medium text-sm sm:text-base">
             <span>Total ({totalTickets} tickets)</span>
             <span>{formatCurrency(totalAmount)}</span>
           </div>
