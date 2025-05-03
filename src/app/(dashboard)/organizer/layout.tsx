@@ -25,17 +25,9 @@ export default function Dashboard({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <div className="relative">
-          <Navbar />
-          <SideBarApp>{children}</SideBarApp>
-        </div>
-
-        <Toaster richColors position="top-right" />
-      </body>
-    </html>
+    <div className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <Navbar />
+      <SideBarApp>{children}</SideBarApp>
+    </div>
   );
 }

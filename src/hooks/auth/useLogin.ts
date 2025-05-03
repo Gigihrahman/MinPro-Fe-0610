@@ -30,7 +30,7 @@ const useLogin = () => {
       localStorage.setItem("role", role);
 
       if (role === "ORGANIZER") {
-        router.push("/organizer/dashboard");
+        router.push("/organizer/dashboard-organizer");
       } else if (role === "ADMIN") {
         router.push("/admin/dashboard");
       } else {

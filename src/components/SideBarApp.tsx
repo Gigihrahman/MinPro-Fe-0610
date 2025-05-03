@@ -32,31 +32,61 @@ import {
 import React, { useState } from "react";
 
 const navItems = [
-  { icon: Home, label: "Dashboard", href: "#", active: false },
-  { icon: BarChart3, label: "Analytics", href: "#", active: false },
-  { icon: CreditCard, label: "Transactions", href: "#", active: false },
   {
-    icon: MessageSquare,
-    label: "Messages",
+    icon: Home,
+    label: "Dashboard",
+    href: "dashboard-organizer",
+    active: false,
+  },
+  {
+    icon: BarChart3,
+    label: "Transactions",
     href: "#",
     active: false,
     subItems: [
-      { label: "Inbox", href: "#", active: true },
-      { label: "Sent", href: "#" },
-      { label: "Archived", href: "#" },
+      { label: "All Transactions", href: "all-transactions", active: false },
+      { label: "Manual Payments", href: "manual-payments", active: false },
     ],
   },
-  { icon: Calendar, label: "Calendar", href: "#", active: false },
-  { icon: User, label: "Profile", href: "#", active: false },
-  { icon: Settings, label: "Settings", href: "#", active: false },
+  {
+    icon: CreditCard,
+    label: "Events",
+    href: "#",
+    active: false,
+    subItems: [
+      { label: "All Events", href: "all-events", active: false },
+      { label: "Create Events", href: "create-events", active: false },
+    ],
+  },
+  {
+    icon: MessageSquare,
+    label: "Tickets",
+    href: "#",
+    active: false,
+    subItems: [{ label: "Edit Tickets", href: "edit-tickets", active: false }],
+  },
+  {
+    icon: MessageSquare,
+    label: "Vouchers",
+    href: "#",
+    active: false,
+    subItems: [
+      { label: "All Vouchers", href: "all-vouchers", active: false },
+      { label: "Create Vouchers", href: "create-vouchers", active: false },
+    ],
+  },
+  { icon: User, label: "Profile", href: "profile", active: false },
 ];
 
 export function SideBarApp({ children }: { children: React.ReactNode }) {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
-  const [isOpen, setIsOpen] = useState(false);
+  const [openItems, setOpenItems] = useState<Record<string, boolean>>({});
 
-  const handleToggle = () => {
-    setIsOpen((prev) => !prev);
+  const handleToggle = (label: string) => {
+    setOpenItems((prev) => ({
+      ...prev,
+      [label]: !prev[label],
+    }));
   };
   return (
     <SidebarProvider>
@@ -88,14 +118,13 @@ export function SideBarApp({ children }: { children: React.ReactNode }) {
               <React.Fragment key={item.label}>
                 {item.subItems ? (
                   <Collapsible
-                    open={isOpen}
-                    onOpenChange={setIsOpen}
+                    open={!!openItems[item.label]}
+                    onOpenChange={() => handleToggle(item.label)}
                     className="w-full overflow-hidden"
                   >
                     <CollapsibleTrigger asChild>
                       <Button
                         variant="ghost"
-                        onClick={handleToggle}
                         className={cn(
                           "group relative flex w-full justify-start gap-3 px-3 py-2",
                           item.active && "text-primary font-medium"
@@ -119,7 +148,7 @@ export function SideBarApp({ children }: { children: React.ReactNode }) {
                         <span>{item.label}</span>
                         <div className="ml-auto flex h-5 w-5 items-center justify-center">
                           <motion.div
-                            animate={{ rotate: isOpen ? 45 : 0 }}
+                            animate={{ rotate: openItems[item.label] ? 45 : 0 }}
                             transition={{ duration: 0.2 }}
                             className="transition-transform duration-200"
                           >

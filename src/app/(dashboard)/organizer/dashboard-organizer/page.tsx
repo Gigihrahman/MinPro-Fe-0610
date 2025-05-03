@@ -2,7 +2,7 @@
 import React from "react";
 
 const DashboardOrganizer = () => {
-  return <div>asidhfskubfiuahfuabsjkfbkasoiu</div>;
+  return <div>Dashboard Organizer</div>;
 };
 
 export default DashboardOrganizer;

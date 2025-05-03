@@ -1,8 +1,8 @@
 import RegisterOrganizerPage from "@/features/register-organizer";
 import React from "react";
 
-const DashboardOrganizer = () => {
+const RegisterOrganizer = () => {
   return <RegisterOrganizerPage />;
 };
 
-export default DashboardOrganizer;
+export default RegisterOrganizer;

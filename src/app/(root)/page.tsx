@@ -6,16 +6,9 @@ export default async function Home() {
   if (!session) {
     return redirect("/login");
   }
-  if (session.user.role === "USER") {
-    return redirect("/");
-  }
-  if (session.user.role === "ADMIN") {
-    return redirect("/organizer/dashboard");
-  }
-
   return (
     <div>
-      <div></div>
+      <div>ini halaman user</div>
       <p></p>
     </div>
   );
