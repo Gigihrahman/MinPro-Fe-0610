@@ -3,18 +3,23 @@ import EventList from "./components/EventList";
 import Jumbotron from "./components/Jumbotron";
 import { Suspense } from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import NavbarHomePage from "@/components/NavbarHomePage";
 
 const HomePage = async () => {
   const events = await GetEvents();
+  console.log(events);
   const eventData = Array.isArray(events) ? events : events.data || [];
   return (
-    <main className="container mx-auto flex-1">
-      <Jumbotron />
+    <>
+      <NavbarHomePage />
+      <main className="container mx-auto flex-1">
+        <Jumbotron />
 
-      <Suspense fallback={<div>Loading...</div>}>
-        <EventList events={eventData} />
-      </Suspense>
-    </main>
+        <Suspense fallback={<div>Loading...</div>}>
+          <EventList events={eventData} />
+        </Suspense>
+      </main>
+    </>
   );
 };
 

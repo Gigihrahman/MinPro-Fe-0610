@@ -17,33 +17,55 @@ import { TicketSelection } from "./TicketSelection";
 
 import { getEventBySlug } from "@/features/event-detail/api/GetEventDetail";
 import Image from "next/image";
+import { FC } from "react";
+import type { Metadata } from "next";
 
 // This would normally come from a database
+interface DetailEventProps {
+  slug: string;
+}
 
-export default async function DetailPageBody() {
-  const event = await getEventBySlug("music-festival");
-  console.log(event);
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const slug = (await params).slug;
+  const event = await getEventBySlug(slug);
+
+  return {
+    title: `${slug} Post`,
+    description: event.description,
+  };
+}
+export const DetailPageBody: FC<DetailEventProps> = async ({ slug }) => {
+  const event = await getEventBySlug(slug);
+  console.log(event.thumbnail);
+
+  // Check if event.seats is empty or undefined, return an empty array if true
+  const seats = event.seats && event.seats.length > 0 ? event.seats : [];
+
   return (
     <div className="bg-background min-h-screen">
       <div className="container px-4 py-6 md:px-6 md:py-8">
         <Link
-          href="/events"
+          href="/"
           className="text-muted-foreground hover:text-foreground mb-6 inline-flex items-center text-sm font-medium"
         >
           <ArrowLeft className="mr-1 h-4 w-4" />
-          Back to Events
+          Back to homepage
         </Link>
 
         <div className="grid gap-6 lg:grid-cols-3 lg:gap-12">
           <div className="lg:col-span-2">
             <div className="overflow-hidden rounded-lg shadow-lg">
               <Image
-                src={event.image || "/placeholder.svg"}
+                src={event.thumbnail || "/placeholder.svg"}
                 alt={event.name}
-                width={600} // Set a max width for responsiveness
-                height={300} // Set a max height
-                layout="intrinsic" // Keep the image responsive while maintaining its aspect ratio
-                className="object-cover rounded-t-lg w-full max-w-[600px] max-h-[400px]" // Set the image to fill container but not exceed 600px width or 300px height
+                width={600}
+                height={300}
+                layout="intrinsic"
+                className="object-cover rounded-t-lg w-full max-w-[600px] max-h-[400px]"
               />
             </div>
 
@@ -52,10 +74,6 @@ export default async function DetailPageBody() {
                 <Badge className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-1 px-3 rounded-full text-sm">
                   {event.category.name}
                 </Badge>
-                <div className="text-muted-foreground flex items-center text-sm">
-                  <Users className="mr-1 h-4 w-4" />
-                  <span>{event.seats[0].totalSeat} seats available</span>
-                </div>
               </div>
 
               <h1 className="mt-2 text-3xl font-bold tracking-tight md:text-4xl text-gray-900">
@@ -103,7 +121,7 @@ export default async function DetailPageBody() {
                   <div className="bg-muted/50 rounded-lg border p-4">
                     <h3 className="font-medium">{event.city.name}</h3>
                     <p className="text-muted-foreground text-sm">
-                      {event.description}
+                      {event.content}
                     </p>
                   </div>
                 </TabsContent>
@@ -122,20 +140,10 @@ export default async function DetailPageBody() {
           <div className="lg:row-start-1">
             <div className="sticky top-20 rounded-lg border bg-card p-4 shadow-lg">
               <div className="mb-4 flex items-center justify-between">
-                <div className="flex items-center text-sm text-muted-foreground">
-                  <Tag className="mr-1 h-4 w-4" />
-                  <span>{event.seats[0].totalSeat} seats left</span>
-                </div>
+                <div className="flex items-center text-sm text-muted-foreground"></div>
               </div>
 
-              <TicketSelection tickets={event.seats} />
-
-              <div className="mt-6 space-y-2">
-                <Button className="w-full">Buy Tickets</Button>
-                <Button variant="outline" className="w-full">
-                  Add to Wishlist
-                </Button>
-              </div>
+              <TicketSelection tickets={seats} />
 
               <div className="mt-4 rounded-md bg-muted p-3">
                 <h4 className="font-medium">Event Policies</h4>
@@ -151,4 +159,4 @@ export default async function DetailPageBody() {
       </div>
     </div>
   );
-}
+};

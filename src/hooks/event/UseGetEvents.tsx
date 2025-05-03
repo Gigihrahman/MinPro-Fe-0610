@@ -2,18 +2,27 @@ import { axiosInstance } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import { Event } from "@/types/event";
 import { PageableResponse, PaginationQueries } from "@/types/pagination";
+
 interface GetEventsQuery extends PaginationQueries {
   search?: string;
+  city?: string;
+  category?: string;
 }
 
-const useGetProfile = (queries?: GetEventsQuery) => {
+const useGetevents = (queries?: GetEventsQuery) => {
   return useQuery({
-    queryKey: ["events"],
+    queryKey: ["events", queries],
     queryFn: async () => {
       const { data } = await axiosInstance.get<PageableResponse<Event>>(
         "/events",
         {
-          params: { queries },
+          params: {
+            page: queries?.page,
+            take: queries?.take,
+            search: queries?.search,
+            city: queries?.city,
+            category: queries?.category,
+          },
         }
       );
       return data;
@@ -21,4 +30,4 @@ const useGetProfile = (queries?: GetEventsQuery) => {
   });
 };
 
-export default useGetProfile;
+export default useGetevents;

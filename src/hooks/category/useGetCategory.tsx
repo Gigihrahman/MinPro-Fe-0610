@@ -1,18 +1,12 @@
 import { axiosInstance } from "@/lib/axios";
+import { Category } from "@/types/category";
 import { useQuery } from "@tanstack/react-query";
 
-interface GetCategoryQuery {
-  id: number;
-  name: string;
-  slug: string;
-}
 const useGetCategories = () => {
   return useQuery({
-    queryKey: ["events"],
+    queryKey: ["category"],
     queryFn: async () => {
-      const { data } = await axiosInstance.get<GetCategoryQuery[]>(
-        "/categories"
-      );
+      const { data } = await axiosInstance.get<Category[]>("/category");
       return data;
     },
   });

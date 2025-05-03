@@ -1,4 +1,4 @@
-import SearchPage from "@/features/search";
+import SearchPage from "@/features/explore";
 
 const Search = () => {
   return <SearchPage />;

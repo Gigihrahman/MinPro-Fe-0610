@@ -8,15 +8,23 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { FC } from "react";
-
+interface SelectProps {
+  id: number;
+  name: string;
+  slug: string;
+}
 interface CardFilterProps {
+  value: string; // Tambahkan properti `value` untuk mengikat ke nilai yang dipilih
   onChange: (value: string) => void;
-  data: string[];
+  data: SelectProps[] | undefined;
   label: string;
 }
-const CardFilter: FC<CardFilterProps> = ({ onChange, data, label }) => {
+
+const CardFilter: FC<CardFilterProps> = ({ value, onChange, data, label }) => {
   return (
-    <Select onValueChange={onChange}>
+    <Select value={value} onValueChange={onChange}>
+      {" "}
+      {/* Menambahkan value di Select */}
       <SelectTrigger className="w-[300px] bg-white/90 backdrop-blur-sm text-gray-800 border-0 rounded-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-opacity-75 shadow-md px-4 py-3 transition-all duration-200">
         <SelectValue placeholder={`Select ${label}`} />
       </SelectTrigger>
@@ -29,11 +37,11 @@ const CardFilter: FC<CardFilterProps> = ({ onChange, data, label }) => {
             data.map((item) => {
               return (
                 <SelectItem
-                  key={item}
-                  value={item}
+                  key={item.id}
+                  value={item.slug}
                   className="text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 focus:bg-gradient-to-r focus:from-indigo-100 focus:to-purple-100 rounded-md mx-1 my-0.5 transition-colors duration-150"
                 >
-                  {item}
+                  {item.name}
                 </SelectItem>
               );
             })}

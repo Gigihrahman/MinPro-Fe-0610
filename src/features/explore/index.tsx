@@ -1,4 +1,4 @@
-import SearchForm from "@/features/search/components/SearchHeader";
+import SearchForm from "@/features/explore/components/SearchHeader";
 import React from "react";
 
 const SearchPage = () => {

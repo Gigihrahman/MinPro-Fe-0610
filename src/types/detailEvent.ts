@@ -7,8 +7,9 @@ export interface DetailEvent {
   cityId: number;
   locationDetail: string;
   name: string;
-  image: string;
+  thumbnail: string;
   description: string;
+  content: string;
   startEvent: string;
   endEvent: string;
   slug: string;
