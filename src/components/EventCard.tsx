@@ -1,14 +1,16 @@
-import { Calendar, MapPin } from "lucide-react";
+import { ArrowRight, Calendar, CalendarOff, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { formatDate } from "@/lib/formatDate";
 
 interface EventCardProps {
   slug: string;
   title: string;
-  date: string;
+  startDate: string;
+  endDate: string;
   location: string;
   image: string;
   category: string;
@@ -17,7 +19,8 @@ interface EventCardProps {
 export default function EventCard({
   slug,
   title,
-  date,
+  startDate,
+  endDate,
   location,
   image,
   category,
@@ -49,7 +52,11 @@ export default function EventCard({
         {/* Date and Location */}
         <div className="flex items-center text-gray-700 mt-4">
           <Calendar className="mr-2" />
-          <span className="text-sm">{date}</span>
+          <span className="text-sm">Start: {formatDate(startDate)}</span>
+        </div>
+        <div className="flex items-center text-gray-700 mt-4">
+          <CalendarOff className="mr-2 " />
+          <span className="text-sm">End: {formatDate(endDate)}</span>
         </div>
         <div className="flex items-center text-gray-700 mt-2">
           <MapPin className="mr-2" />

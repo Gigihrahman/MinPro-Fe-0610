@@ -42,7 +42,9 @@
     "tailwind-merge": "^3.2.0",
     "usehooks-ts": "^3.1.1",
     "yup": "^1.6.1",
-    "yup-password": "^0.4.0"
+    "yup-password": "^0.4.0",
+    "react-markdown": "^10.0.1",
+    "rehype-raw": "^7.0.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

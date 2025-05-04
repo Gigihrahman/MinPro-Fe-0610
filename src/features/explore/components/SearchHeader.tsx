@@ -9,6 +9,7 @@ import useGetCities from "@/hooks/city/useGetCity";
 import useGetevents from "@/hooks/event/UseGetEvents";
 import EventCard from "@/components/EventCard";
 import PaginationSection from "@/components/PaginationSection";
+import { X } from "lucide-react";
 
 // Definisikan tipe data untuk event
 interface Event {
@@ -107,7 +108,7 @@ const SearchForm = () => {
                         onClick={clearCategory}
                         className="ml-2 text-red-500 hover:text-red-700"
                       >
-                        Clear Category
+                        <X />
                       </button>
                     )}
                   </div>
@@ -124,7 +125,7 @@ const SearchForm = () => {
                         onClick={clearCity}
                         className="ml-2 text-red-500 hover:text-red-700"
                       >
-                        Clear City
+                        <X />
                       </button>
                     )}
                   </div>
@@ -176,7 +177,8 @@ const SearchForm = () => {
                   key={event.id}
                   slug={event.slug}
                   title={event.name}
-                  date={event.startEvent}
+                  startDate={event.startEvent}
+                  endDate={event.endEvent}
                   category={event.category.name}
                   image="/file.svg"
                   location={event.city.name}

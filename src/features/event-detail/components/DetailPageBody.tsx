@@ -1,6 +1,8 @@
 import {
   ArrowLeft,
+  ArrowRight,
   Calendar,
+  ChevronRight,
   Clock,
   MapPin,
   Star,
@@ -19,6 +21,8 @@ import { getEventBySlug } from "@/features/event-detail/api/GetEventDetail";
 import Image from "next/image";
 import { FC } from "react";
 import type { Metadata } from "next";
+import Markdown from "@/components/Markdown";
+import { formatDate } from "./../../../lib/formatDate";
 
 // This would normally come from a database
 interface DetailEventProps {
@@ -83,15 +87,15 @@ export const DetailPageBody: FC<DetailEventProps> = async ({ slug }) => {
               <div className="text-muted-foreground mt-4 flex flex-col gap-2 sm:flex-row sm:gap-6">
                 <div className="flex items-center">
                   <Calendar className="mr-2 h-5 w-5" />
-                  <span>{event.startEvent}</span>
+                  <span>{formatDate(event.startEvent)}</span>
                 </div>
                 <div className="flex items-center">
-                  <Clock className="mr-2 h-5 w-5" />
-                  <span>{event.endEvent}</span>
+                  <ArrowRight className="mr-2 h-5 w-5" />
+                  <span>{formatDate(event.endEvent)}</span>
                 </div>
                 <div className="flex items-center">
                   <MapPin className="mr-2 h-5 w-5" />
-                  <span>{event.locationDetail}</span>
+                  <span className="line-clamp-1">{event.locationDetail}</span>
                 </div>
               </div>
 
@@ -120,9 +124,8 @@ export const DetailPageBody: FC<DetailEventProps> = async ({ slug }) => {
                 <TabsContent value="details" className="mt-4 space-y-4">
                   <div className="bg-muted/50 rounded-lg border p-4">
                     <h3 className="font-medium">{event.city.name}</h3>
-                    <p className="text-muted-foreground text-sm">
-                      {event.content}
-                    </p>
+
+                    <Markdown content={event.content} />
                   </div>
                 </TabsContent>
                 <TabsContent value="location" className="mt-4">

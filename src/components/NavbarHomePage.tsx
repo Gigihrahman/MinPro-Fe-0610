@@ -46,7 +46,7 @@ const NavbarHomePage: FC = () => {
             <ul className="hidden lg:flex items-center justify-start gap-6 md:gap-8 py-3 sm:justify-center">
               <li>
                 <Link
-                  href="#"
+                  href="/"
                   title=""
                   className="flex text-sm font-medium text-gray-900 hover:text-indigo-600 dark:text-white dark:hover:text-indigo-400"
                 >
@@ -55,7 +55,7 @@ const NavbarHomePage: FC = () => {
               </li>
               <li className="shrink-0">
                 <Link
-                  href="#"
+                  href="/explore"
                   title=""
                   className="flex text-sm font-medium text-gray-900 hover:text-indigo-600 dark:text-white dark:hover:text-indigo-400"
                 >
@@ -110,7 +110,7 @@ const NavbarHomePage: FC = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuItem asChild>
-                  <Link href="#" className="cursor-pointer">
+                  <Link href="/profile" className="cursor-pointer">
                     My Account
                   </Link>
                 </DropdownMenuItem>
@@ -173,7 +173,7 @@ const NavbarHomePage: FC = () => {
                       <ul className="space-y-3 text-gray-900 dark:text-white text-sm font-medium">
                         <li>
                           <Link
-                            href="#"
+                            href="/"
                             className="block py-2 hover:text-indigo-600 dark:hover:text-indigo-400"
                           >
                             Home
@@ -181,7 +181,7 @@ const NavbarHomePage: FC = () => {
                         </li>
                         <li>
                           <Link
-                            href="#"
+                            href="/explore"
                             className="block py-2 hover:text-indigo-600 dark:hover:text-indigo-400"
                           >
                             Explore
