@@ -1,0 +1,85 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="concertBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1a2e" />
+      <stop offset="100%" stop-color="#16213e" />
+    </linearGradient>
+    <radialGradient id="spotlight1" cx="30%" cy="30%" r="60%" fx="30%" fy="30%">
+      <stop offset="0%" stop-color="#e94560" stop-opacity="0.7" />
+      <stop offset="100%" stop-color="#e94560" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="spotlight2" cx="70%" cy="40%" r="50%" fx="70%" fy="40%">
+      <stop offset="0%" stop-color="#4e00c2" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#4e00c2" stop-opacity="0" />
+    </radialGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  
+  <!-- Main background -->
+  <rect width="800" height="500" fill="url(#concertBg)" />
+  
+  <!-- Spotlight effects -->
+  <ellipse cx="240" cy="150" rx="300" ry="250" fill="url(#spotlight1)" />
+  <ellipse cx="560" cy="200" rx="250" ry="200" fill="url(#spotlight2)" />
+  
+  <!-- Crowd silhouette -->
+  <path d="M0,500 L0,420 C20,410 40,430 60,425 C80,420 100,400 120,410 C140,420 160,440 180,435 C200,430 220,410 240,415 C260,420 280,430 300,425 C320,420 340,410 360,415 C380,420 400,430 420,425 C440,420 460,410 480,415 C500,420 520,435 540,430 C560,425 580,415 600,420 C620,425 640,435 660,430 C680,425 700,415 720,420 C740,425 760,435 780,430 L800,425 L800,500 Z" fill="black" opacity="0.8" />
+  
+  <!-- Stage -->
+  <rect x="150" y="150" width="500" height="10" fill="#444" />
+  
+  <!-- Band members silhouettes -->
+  <!-- Drummer -->
+  <circle cx="400" cy="120" r="25" fill="black" />
+  <rect x="380" y="145" width="40" height="60" fill="black" />
+  <!-- Drum set -->
+  <ellipse cx="400" cy="180" rx="40" ry="15" fill="#333" />
+  
+  <!-- Guitarist left -->
+  <circle cx="300" cy="130" r="20" fill="black" />
+  <rect x="290" y="150" width="20" height="55" fill="black" />
+  <!-- Guitar -->
+  <path d="M320,170 L340,190 L335,200 L315,180 Z" fill="#222" />
+  
+  <!-- Guitarist right -->
+  <circle cx="500" cy="130" r="20" fill="black" />
+  <rect x="490" y="150" width="20" height="55" fill="black" />
+  <!-- Guitar -->
+  <path d="M480,170 L460,190 L465,200 L485,180 Z" fill="#222" />
+  
+  <!-- Microphone stand -->
+  <rect x="398" y="170" width="4" height="35" fill="#555" />
+  <circle cx="400" cy="165" r="5" fill="#777" />
+  
+  <!-- Laser lights -->
+  <line x1="100" y1="0" x2="300" y2="200" stroke="#e94560" stroke-width="2" opacity="0.7" />
+  <line x1="250" y1="0" x2="400" y2="180" stroke="#4e00c2" stroke-width="2" opacity="0.7" />
+  <line x1="400" y1="0" x2="350" y2="190" stroke="#5dadec" stroke-width="2" opacity="0.7" />
+  <line x1="550" y1="0" x2="450" y2="180" stroke="#e94560" stroke-width="2" opacity="0.7" />
+  <line x1="700" y1="0" x2="500" y2="190" stroke="#4e00c2" stroke-width="2" opacity="0.7" />
+  
+  <!-- Light beams -->
+  <polygon points="300,160 250,0 350,0" fill="white" opacity="0.05" />
+  <polygon points="400,160 350,0 450,0" fill="white" opacity="0.05" />
+  <polygon points="500,160 450,0 550,0" fill="white" opacity="0.05" />
+  
+  <!-- Small light particles -->
+  <g filter="url(#glow)">
+    <circle cx="200" cy="100" r="2" fill="white" opacity="0.8" />
+    <circle cx="250" cy="150" r="1.5" fill="white" opacity="0.6" />
+    <circle cx="300" cy="80" r="1" fill="white" opacity="0.7" />
+    <circle cx="350" cy="120" r="2" fill="white" opacity="0.8" />
+    <circle cx="400" cy="90" r="1.5" fill="white" opacity="0.7" />
+    <circle cx="450" cy="130" r="1" fill="white" opacity="0.6" />
+    <circle cx="500" cy="70" r="2" fill="white" opacity="0.8" />
+    <circle cx="550" cy="110" r="1.5" fill="white" opacity="0.7" />
+    <circle cx="600" cy="140" r="1" fill="white" opacity="0.6" />
+  </g>
+  
+  <!-- Text "LIVE CONCERT" -->
+  <text x="400" y="70" font-family="Arial, sans-serif" font-size="36" font-weight="bold" text-anchor="middle" fill="white" opacity="0.9">LIVE CONCERT</text>
+</svg>

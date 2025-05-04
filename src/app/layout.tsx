@@ -1,5 +1,5 @@
-import Navbar from "@/components/Navbar";
 import NextAuthProvider from "@/providers/NextAuthProvider";
+import NuqsProvider from "@/providers/NuqsProvider";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
 import TokenProvider from "@/providers/TokenProvider";
 import type { Metadata } from "next";
@@ -33,11 +33,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ReactQueryProvider>
-          <NextAuthProvider>
-            <TokenProvider>
-              {children}
-            </TokenProvider>
-          </NextAuthProvider>
+          <NuqsProvider>
+            <NextAuthProvider>
+              <TokenProvider>{children}</TokenProvider>
+            </NextAuthProvider>
+          </NuqsProvider>
         </ReactQueryProvider>
         <Toaster richColors position="top-right" />
       </body>
