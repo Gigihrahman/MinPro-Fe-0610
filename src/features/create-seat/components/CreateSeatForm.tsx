@@ -18,6 +18,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { createSeatSchema } from "@/features/create-seat/schema";
 import { FC } from "react";
+import useCreateSeat from "@/hooks/seat/useCreateSeat";
 
 interface CreateSeatFormProps {
   id: number;
@@ -25,6 +26,7 @@ interface CreateSeatFormProps {
 }
 
 const CreateSeatForm: FC<CreateSeatFormProps> = ({ id, name }) => {
+  const { mutateAsync: createSeat, isPending } = useCreateSeat(id);
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -34,8 +36,7 @@ const CreateSeatForm: FC<CreateSeatFormProps> = ({ id, name }) => {
     },
     validationSchema: createSeatSchema,
     onSubmit: async (values) => {
-      console.log(values);
-      console.log(id);
+      createSeat(values);
     },
   });
 

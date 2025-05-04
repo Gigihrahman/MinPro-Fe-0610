@@ -28,80 +28,61 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-
-// Interface untuk values dari form
+import { voucherSchema } from "@/features/create-voucher/schema";
+import useCreateVoucher from "@/hooks/voucher/useCreateVoucher";
 interface VoucherFormValues {
-  name: string;
+  value: number; // value is now a number
   description: string;
-  quota: string;
-  validFrom: Date | null;
+  quota: number; // quota is now a number
+  validAt: Date | null; // Changed validFrom to validAt
   expiredAt: Date | null;
 }
 
-// Schema validasi
-const voucherSchema = Yup.object().shape({
-  name: Yup.string()
-    .required("Nama voucher wajib diisi")
-    .min(3, "Nama voucher minimal 3 karakter")
-    .max(50, "Nama voucher maksimal 50 karakter"),
-  description: Yup.string()
-    .required("Deskripsi voucher wajib diisi")
-    .min(10, "Deskripsi minimal 10 karakter")
-    .max(500, "Deskripsi maksimal 500 karakter"),
-  quota: Yup.number()
-    .required("Kuota voucher wajib diisi")
-    .integer("Kuota harus bilangan bulat")
-    .min(1, "Kuota minimal 1"),
-  validFrom: Yup.date().required("Tanggal berlaku voucher wajib diisi"),
-  expiredAt: Yup.date()
-    .required("Tanggal kedaluwarsa voucher wajib diisi")
-    .min(
-      Yup.ref("validFrom"),
-      "Tanggal kedaluwarsa harus setelah tanggal berlaku"
-    ),
-});
-
-const CreateVoucherPage: FC = () => {
+interface CreateVoucherFormProps {
+  eventId: number;
+  eventName: string;
+}
+const CreateVoucherForm: FC<CreateVoucherFormProps> = ({
+  eventId,
+  eventName,
+}) => {
+  const { mutateAsync: createVoucher } = useCreateVoucher(eventId);
   const formik = useFormik<VoucherFormValues>({
     initialValues: {
-      name: "",
+      value: 0,
       description: "",
-      quota: "",
-      validFrom: null,
+      quota: 0,
+      validAt: null,
       expiredAt: null,
     },
     validationSchema: voucherSchema,
     onSubmit: async (values) => {
       console.log(values);
-      // Logic untuk menyimpan voucher
-      alert("Voucher berhasil dibuat!");
+      createVoucher({
+        description: values.description,
+        quota: values.quota,
+        value: values.value,
+        validAt: values.validAt?.toISOString() || "",
+        expiredAt: values.expiredAt?.toISOString() || "",
+      });
     },
   });
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 to-purple-800 text-white">
-      {/* Header Section */}
-      <header className="px-6 py-8 max-w-3xl mx-auto">
-        <Button
-          variant="ghost"
-          asChild
-          className="text-indigo-200 hover:text-white hover:bg-indigo-800/30"
-        >
-          <Link
-            href="/admin/vouchers"
-            className="inline-flex items-center gap-2 font-medium"
-          >
-            <ArrowLeft className="h-5 w-5" />
-            <span>Kembali ke Daftar Voucher</span>
-          </Link>
-        </Button>
+      {/* Move the button outside the header and align it to the left */}
+
+      {/* Main Header Section as a div now */}
+      <div className="px-6 py-8 max-w-3xl mx-auto">
         <h1 className="mt-6 text-4xl font-bold text-center tracking-tight text-white">
-          Buat Voucher Baru
+          Buat Voucher Baru untuk event dan campaign marketing Anda
         </h1>
         <p className="text-center mt-3 text-indigo-200 max-w-2xl mx-auto">
-          Buat voucher promo untuk event dan campaign marketing Anda
+          Anda ,membuat voucher promo untuk event{" "}
+          <span className="font-bold text-indigo-500 text-2xl">
+            {eventName}
+          </span>
         </p>
-      </header>
+      </div>
 
       {/* Main Form */}
       <main className="px-6 pb-16">
@@ -118,23 +99,24 @@ const CreateVoucherPage: FC = () => {
               </CardHeader>
 
               <CardContent className="space-y-6">
-                {/* Nama Voucher */}
+                {/* Jumlah Diskon */}
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="text-white">
-                    Nama Voucher
+                  <Label htmlFor="value" className="text-white">
+                    Jumlah Diskon yang Diinginkan (Rupiah)
                   </Label>
                   <Input
-                    id="name"
-                    name="name"
-                    value={formik.values.name}
+                    id="value"
+                    name="value"
+                    type="number"
+                    value={formik.values.value} // Ensure controlled state
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    placeholder="Contoh: DISC25, NEWYEAR2025"
+                    placeholder="Masukkan jumlah diskon dalam Rupiah"
                     className="bg-white/10 border-indigo-500/30 text-white placeholder:text-indigo-200/70 focus:border-indigo-400 focus-visible:ring-indigo-500/50"
                   />
-                  {formik.touched.name && formik.errors.name && (
+                  {formik.touched.value && formik.errors.value && (
                     <div className="mt-2 px-3 py-2 rounded-md bg-red-900/40 border-l-4 border-red-500 text-red-200 text-sm font-medium">
-                      {formik.errors.name}
+                      {formik.errors.value}
                     </div>
                   )}
                 </div>
@@ -178,7 +160,7 @@ const CreateVoucherPage: FC = () => {
                     id="quota"
                     name="quota"
                     type="number"
-                    value={formik.values.quota}
+                    value={formik.values.quota} // Ensure controlled state
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     placeholder="Jumlah voucher yang tersedia"
@@ -209,7 +191,7 @@ const CreateVoucherPage: FC = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Tanggal Mulai Berlaku */}
                     <div className="space-y-2">
-                      <Label htmlFor="validFrom" className="text-white">
+                      <Label htmlFor="validAt" className="text-white">
                         Tanggal Mulai Berlaku
                       </Label>
                       <Popover>
@@ -218,12 +200,12 @@ const CreateVoucherPage: FC = () => {
                             variant="outline"
                             className={cn(
                               "w-full justify-start text-left font-normal bg-white/10 border-indigo-500/30 text-white hover:bg-indigo-800/30 hover:text-white",
-                              !formik.values.validFrom && "text-indigo-200/70"
+                              !formik.values.validAt && "text-indigo-200/70"
                             )}
                           >
                             <CalendarIcon className="mr-2 h-4 w-4" />
-                            {formik.values.validFrom ? (
-                              format(formik.values.validFrom, "dd MMMM yyyy", {
+                            {formik.values.validAt ? (
+                              format(formik.values.validAt, "dd MMMM yyyy", {
                                 locale: id,
                               })
                             ) : (
@@ -234,9 +216,9 @@ const CreateVoucherPage: FC = () => {
                         <PopoverContent className="w-auto p-0 bg-gray-900 border-gray-700">
                           <Calendar
                             mode="single"
-                            selected={formik.values.validFrom || undefined}
+                            selected={formik.values.validAt || undefined}
                             onSelect={(date) => {
-                              formik.setFieldValue("validFrom", date);
+                              formik.setFieldValue("validAt", date);
                             }}
                             disabled={(date) => {
                               const today = new Date();
@@ -248,9 +230,9 @@ const CreateVoucherPage: FC = () => {
                           />
                         </PopoverContent>
                       </Popover>
-                      {formik.touched.validFrom && formik.errors.validFrom && (
+                      {formik.touched.validAt && formik.errors.validAt && (
                         <div className="mt-2 px-3 py-2 rounded-md bg-red-900/40 border-l-4 border-red-500 text-red-200 text-sm font-medium">
-                          {formik.errors.validFrom}
+                          {formik.errors.validAt}
                         </div>
                       )}
                     </div>
@@ -290,9 +272,9 @@ const CreateVoucherPage: FC = () => {
                               const today = new Date();
                               today.setHours(0, 0, 0, 0);
 
-                              if (formik.values.validFrom) {
+                              if (formik.values.validAt) {
                                 return (
-                                  date < today || date < formik.values.validFrom
+                                  date < today || date < formik.values.validAt
                                 );
                               }
 
@@ -338,4 +320,4 @@ const CreateVoucherPage: FC = () => {
   );
 };
 
-export default CreateVoucherPage;
+export default CreateVoucherForm;
