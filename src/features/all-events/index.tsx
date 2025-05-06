@@ -1,5 +1,5 @@
 import React from "react";
-import AllEventsTable from "./components/AllEventsTable";
+import AllEventsTable from "./components/AllEventTable";
 
 const AllEventsPage = () => {
   return <AllEventsTable />;

@@ -1,9 +1,8 @@
-import React from 'react'
+import OrganizerProfilePage from "@/features/profile-organizer";
+import React from "react";
 
 const profile = () => {
-  return (
-    <div>asdnajdbiabsfbaisdfasiobfoiabsofbaoisbasdansfbauisfoiansiofnasin PROFILLEEEE</div>
-  )
-}
+  return <OrganizerProfilePage />;
+};
 
-export default profile
+export default profile;

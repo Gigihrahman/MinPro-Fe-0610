@@ -1,3 +1,5 @@
+import { Transactions } from "./transaction";
+
 export interface PaginationMeta {
   page: number;
   take: number;
@@ -14,4 +16,13 @@ export interface PaginationQueries {
   page?: number;
   sortBy?: string;
   sortOrder?: string;
+}
+
+export interface TransactionResponse {
+  data: Transactions[];
+  meta: {
+    page: number;
+    take: number;
+    total: number;
+  };
 }
