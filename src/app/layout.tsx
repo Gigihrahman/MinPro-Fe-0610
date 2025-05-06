@@ -1,12 +1,11 @@
+import NextAuthProvider from "@/providers/NextAuthProvider";
+import NuqsProvider from "@/providers/NuqsProvider";
+import ReactQueryProvider from "@/providers/ReactQueryProvider";
+import TokenProvider from "@/providers/TokenProvider";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import ReactQueryProvider from "@/providers/ReactQueryProvider";
-import NextAuthProvider from "@/providers/NextAuthProvider";
-import TokenProvider from "@/providers/TokenProvider";
-
-import NuqsProvider from "@/providers/NuqsProvider";
 import { Toaster } from "sonner";
+import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

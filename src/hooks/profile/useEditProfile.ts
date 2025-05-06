@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -9,6 +9,7 @@ import { UpdateProfile } from "@/types/updateProfile";
 
 const useUpdateProfile = () => {
   const { axiosInstance } = useAxios();
+  const queryClient = useQueryClient();
   const router = useRouter();
 
   return useMutation({
@@ -19,10 +20,10 @@ const useUpdateProfile = () => {
       );
       return data;
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("Profile updated successfully");
+      await queryClient.invalidateQueries({ queryKey: ["profile"] });
       router.push("/profile");
-      router.refresh()
     },
     onError: (error: AxiosError<any>) => {
       toast.error(error.response?.data.message || "Failed to update profile");

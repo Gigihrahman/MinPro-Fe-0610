@@ -1,69 +1,62 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { ArrowLeft } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-
-interface PasswordFormData {
-  currentPassword: string
-  newPassword: string
-  confirmPassword: string
-}
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import useUpdateProfile from "@/hooks/profile/useEditProfile";
+import { useFormik } from "formik";
+import { ChangePasswordSchema } from "./schema";
+import useChangePassword from "@/hooks/auth/useChangePassword";
 
 export default function ChangePasswordPage() {
-  const router = useRouter()
-  const [formData, setFormData] = useState<PasswordFormData>({
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
-  })
-  const [error, setError] = useState<string | null>(null)
+  const router = useRouter();
+  const { mutateAsync: changePassword, isPending } = useChangePassword();
+  const [error, setError] = useState<string | null>(null);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
+  const formik = useFormik({
+    initialValues: {
+      oldPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    },
+    validationSchema: ChangePasswordSchema,
+    onSubmit: async (values) => {
+      console.log(values);
+      
+      try {
+        // Buat payload tanpa confirmPassword
+        const payload = {
+          oldPassword: values.oldPassword,
+          newPassword: values.newPassword,
+        };
 
-    // Clear error when user types
-    if (error) {
-      setError(null)
-    }
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-
-    // Validate passwords match
-    if (formData.newPassword !== formData.confirmPassword) {
-      setError("New password and confirmation do not match")
-      return
-    }
-
-    // Validate password length
-    if (formData.newPassword.length < 8) {
-      setError("Password must be at least 8 characters long")
-      return
-    }
-
-    // In a real app, you would send this data to your API
-    console.log("Password change data:", formData)
-
-    // Navigate back to profile page after successful password change
-    router.push("/profile")
-  }
+        await changePassword(payload);
+      } catch (err) {
+        setError("Failed to change password");
+      }
+    },
+  });
 
   return (
     <div className="container mx-auto max-w-2xl py-10">
-      <Button variant="ghost" className="mb-4 flex items-center gap-2" onClick={() => router.back()}>
+      <Button
+        variant="ghost"
+        className="mb-4 flex items-center gap-2"
+        onClick={() => router.back()}
+      >
         <ArrowLeft className="h-4 w-4" />
         Back to Profile
       </Button>
@@ -72,7 +65,7 @@ export default function ChangePasswordPage() {
         <CardHeader>
           <CardTitle className="text-2xl">Change Password</CardTitle>
         </CardHeader>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={formik.handleSubmit}>
           <CardContent className="space-y-6">
             {error && (
               <Alert variant="destructive">
@@ -81,13 +74,13 @@ export default function ChangePasswordPage() {
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="currentPassword">Current Password</Label>
+              <Label htmlFor="oldPassword">Old Password</Label>
               <Input
-                id="currentPassword"
-                name="currentPassword"
+                id="oldPassword"
+                name="oldPassword"
                 type="password"
-                value={formData.currentPassword}
-                onChange={handleInputChange}
+                value={formik.values.oldPassword}
+                onChange={formik.handleChange}
                 required
                 placeholder="Enter your current password"
               />
@@ -99,8 +92,8 @@ export default function ChangePasswordPage() {
                 id="newPassword"
                 name="newPassword"
                 type="password"
-                value={formData.newPassword}
-                onChange={handleInputChange}
+                value={formik.values.newPassword}
+                onChange={formik.handleChange}
                 required
                 placeholder="Enter your new password"
               />
@@ -112,15 +105,19 @@ export default function ChangePasswordPage() {
                 id="confirmPassword"
                 name="confirmPassword"
                 type="password"
-                value={formData.confirmPassword}
-                onChange={handleInputChange}
+                value={formik.values.confirmPassword}
+                onChange={formik.handleChange}
                 required
                 placeholder="Confirm your new password"
               />
             </div>
           </CardContent>
           <CardFooter className="flex justify-end gap-2">
-            <Button variant="outline" type="button" onClick={() => router.back()}>
+            <Button
+              variant="outline"
+              type="button"
+              onClick={() => router.back()}
+            >
               Cancel
             </Button>
             <Button type="submit">Change Password</Button>
@@ -128,5 +125,5 @@ export default function ChangePasswordPage() {
         </form>
       </Card>
     </div>
-  )
+  );
 }

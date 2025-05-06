@@ -19,7 +19,7 @@ const useCreateSeat = (id: number) => {
     },
     onSuccess: () => {
       toast.success("Create Seat successfully");
-      router.push("/");
+      router.push("/organizer/organizer-dashboard");
       router.refresh();
     },
     onError: (error: AxiosError<any>) => {

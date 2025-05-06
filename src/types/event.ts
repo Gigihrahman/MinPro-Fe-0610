@@ -5,7 +5,7 @@ export interface Event {
   cityId: number;
   locationDetail: string;
   name: string;
-  image: string;
+
   startEvent: string;
   endEvent: string;
   slug: string;
