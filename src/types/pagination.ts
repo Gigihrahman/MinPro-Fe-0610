@@ -1,4 +1,4 @@
-import { Transactions } from "./transaction";
+import { Transaction } from "./transaction";
 
 export interface PaginationMeta {
   page: number;
@@ -19,7 +19,7 @@ export interface PaginationQueries {
 }
 
 export interface TransactionResponse {
-  data: Transactions[];
+  data: Transaction[];
   meta: {
     page: number;
     take: number;

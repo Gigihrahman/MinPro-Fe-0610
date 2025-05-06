@@ -13,25 +13,29 @@ export interface Transaction {
   createdAt: string; // ISO timestamp
   updatedAt: string; // ISO timestamp
   pointsId: number | null;
-  userEmail: string | null;
-
+  userEmail: string;
   event: {
     name: string;
+    locationDetail: string;
+    startEvent: string;
+    endEvent: string;
   };
-
   voucher: {
     code: string;
   } | null;
-
   detailTransaction: {
     quantity: number;
+    seats: {
+      name: string;
+      price: number;
+    };
   }[];
-
   points: {
     pointsValue: number;
   } | null;
-
   payments: {
     paymentMethod: string;
+    paymentProofUrl: string;
+    createdAt: string;
   }[];
 }

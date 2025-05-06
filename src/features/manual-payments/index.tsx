@@ -1,5 +1,5 @@
 import React from "react";
-import ManualPaymentTablePage from "./components/ManualPaymentsTablePage";
+import ManualPaymentTablePage from "./components/ManualPaymentsTable";
 
 const ManualPaymentsPage = () => {
   return <ManualPaymentTablePage />;
