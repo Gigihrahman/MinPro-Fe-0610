@@ -62,42 +62,15 @@ const EventList: FC<EventListProps> = async ({ events }) => {
                 key={event.id}
                 slug={event.slug}
                 title={event.name}
-                date={event.startEvent}
+                startDate={event.startEvent}
+                endDate={event.endEvent}
                 category={event.category.name}
-                image="/file.svg"
+                categorySlug={event.category.slug}
+                image={event.thumbnail}
                 location={event.city.name}
               />
             ))}
         </div>
-
-        {/* View All Button */}
-        {events.length !== 0 && (
-          <div className="mt-16 flex justify-center">
-            <Link href="/events" className="group relative">
-              {/* Button gradient border effect */}
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full opacity-70 blur-sm group-hover:opacity-100 transition duration-200"></div>
-              <Button className="relative bg-white hover:bg-gray-50 text-gray-800 border-0 hover:text-gray-900 font-medium py-2.5 px-8 rounded-full shadow-md group-hover:shadow-lg transition-all duration-200">
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 font-medium">
-                  View All Events
-                </span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 ml-2 inline-block"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M13 7l5 5m0 0l-5 5m5-5H6"
-                  />
-                </svg>
-              </Button>
-            </Link>
-          </div>
-        )}
       </div>
     </section>
   );

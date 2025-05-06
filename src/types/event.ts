@@ -5,10 +5,11 @@ export interface Event {
   cityId: number;
   locationDetail: string;
   name: string;
-  thumbnail: string;
+
   startEvent: string;
   endEvent: string;
   slug: string;
+  thumbnail: string;
   organizer: {
     name: string;
   };
@@ -17,5 +18,6 @@ export interface Event {
   };
   category: {
     name: string;
+    slug: string;
   };
 }

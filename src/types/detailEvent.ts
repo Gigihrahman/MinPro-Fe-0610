@@ -18,6 +18,8 @@ export interface DetailEvent {
   deletedAt: string | null;
   organizer: {
     name: string;
+    slug: string;
+    profilePicture: string;
   };
   city: {
     name: string;
