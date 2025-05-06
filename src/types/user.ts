@@ -3,5 +3,8 @@ export interface User {
   fullName: string;
   email: string;
   phoneNumber: string;
+  confirmPassword: string;
+  referralCodeUsed: string;
   password: string;
+  role:string
 }

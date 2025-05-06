@@ -11,11 +11,10 @@ const useRegister = () => {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: async (payload: Omit<User, "id">) => {
+    mutationFn: async (payload: Omit<User, "id" | "confirmPassword">) => {
       const { data } = await axiosInstance.post("/auth/register", payload);
-      console.log(data);
 
-      return data;
+      return data; 
     },
     onSuccess: () => {
       toast.success("Register success");

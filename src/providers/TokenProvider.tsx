@@ -14,6 +14,7 @@ const TokenProvider: FC<PropsWithChildren> = ({ children }) => {
       const accessToken = session.data?.user.accessToken;
       if (accessToken) {
         try {
+          
           const decodedToken = jwtDecode(accessToken);
           const tokenExpiry = fromUnixTime(decodedToken.exp!);
 
