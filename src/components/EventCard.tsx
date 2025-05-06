@@ -14,6 +14,7 @@ interface EventCardProps {
   location: string;
   image: string;
   category: string;
+  categorySlug: string;
 }
 
 export default function EventCard({
@@ -24,6 +25,7 @@ export default function EventCard({
   location,
   image,
   category,
+  categorySlug,
 }: EventCardProps) {
   return (
     <Card className="relative bg-white/90 backdrop-blur-sm rounded-lg shadow-md overflow-hidden w-full sm:max-w-md">
@@ -41,9 +43,11 @@ export default function EventCard({
       <CardContent className="relative z-20 p-6">
         <div className="flex justify-between items-center">
           {/* Category Badge */}
-          <Badge className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-1 px-2 rounded-full text-sm">
-            {category}
-          </Badge>
+          <Link href={`/explore?category=${categorySlug}`}>
+            <Badge className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-1 px-2 rounded-full text-sm">
+              {category}
+            </Badge>
+          </Link>
         </div>
 
         {/* Title */}

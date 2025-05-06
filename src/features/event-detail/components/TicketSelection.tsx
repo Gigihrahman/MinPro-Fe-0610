@@ -1,21 +1,23 @@
 "use client";
 import { Minus, Plus } from "lucide-react";
-import { useState } from "react";
+import { FC, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { formatCurrency } from "@/lib/utils";
 import { Seat } from "@/types/seats";
+import useCreateTransaction from "@/hooks/transaction/useCreateTransaction";
 
 interface TicketSelectionProps {
+  eventId: number;
   tickets: Seat[];
-  onChange?: (selectedTickets: Record<number, number>) => void;
 }
 
-export function TicketSelection({ tickets }: TicketSelectionProps) {
+const TicketSelection: FC<TicketSelectionProps> = ({ tickets, eventId }) => {
   const [selectedTickets, setSelectedTickets] = useState<
     Record<number, number>
   >({});
+  const { mutate: createTransaction } = useCreateTransaction();
 
   const totalAmount = Object.entries(selectedTickets).reduce(
     (total, [id, quantity]) => {
@@ -61,7 +63,22 @@ export function TicketSelection({ tickets }: TicketSelectionProps) {
 
   const handleBuyTicketsClick = () => {
     console.log("Tickets Selected:", selectedTickets);
+    console.log("Event ID:", eventId);
     console.log("Total Amount:", totalAmount);
+
+    // Convert Record<number, number> to SeatPayload[] for API call
+    const detailsEventArray = Object.entries(selectedTickets).map(
+      ([seatId, quantity]) => ({
+        seatsId: Number(seatId),
+        quantity,
+      })
+    );
+
+    // Call createTransaction with the correct data format (detailsEventArray instead of selectedTickets)
+    createTransaction({
+      eventId: eventId,
+      detailsEvent: detailsEventArray, // Pass the array of selected seats
+    });
   };
 
   return (
@@ -110,8 +127,8 @@ export function TicketSelection({ tickets }: TicketSelectionProps) {
                   className="h-8 w-8"
                   onClick={() => handleIncrement(ticket.id)}
                   disabled={
-                    (selectedTickets[ticket.id] || 0) + ticket.reserved >=
-                    ticket.totalSeat
+                    selectedTickets[ticket.id] === 0 ||
+                    selectedTickets[ticket.id] >= availableSeats
                   }
                 >
                   <Plus className="h-4 w-4" />
@@ -129,7 +146,6 @@ export function TicketSelection({ tickets }: TicketSelectionProps) {
             <span>Total ({totalTickets} tickets)</span>
             <span>{formatCurrency(totalAmount)}</span>
           </div>
-          {/* Buy Ticket Button */}
           <Button
             onClick={handleBuyTicketsClick}
             className="w-full mt-4"
@@ -141,4 +157,6 @@ export function TicketSelection({ tickets }: TicketSelectionProps) {
       )}
     </div>
   );
-}
+};
+
+export default TicketSelection;

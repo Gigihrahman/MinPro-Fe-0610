@@ -9,6 +9,7 @@ export interface Event {
   startEvent: string;
   endEvent: string;
   slug: string;
+  thumbnail: string;
   organizer: {
     name: string;
   };
@@ -17,5 +18,6 @@ export interface Event {
   };
   category: {
     name: string;
+    slug: string;
   };
 }

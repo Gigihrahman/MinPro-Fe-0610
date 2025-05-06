@@ -65,7 +65,8 @@ const EventList: FC<EventListProps> = async ({ events }) => {
                 startDate={event.startEvent}
                 endDate={event.endEvent}
                 category={event.category.name}
-                image="/file.svg"
+                categorySlug={event.category.slug}
+                image={event.thumbnail}
                 location={event.city.name}
               />
             ))}

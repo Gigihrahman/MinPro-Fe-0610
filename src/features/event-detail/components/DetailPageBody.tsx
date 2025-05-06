@@ -15,7 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { TicketSelection } from "./TicketSelection";
+import TicketSelection from "./TicketSelection";
 
 import { getEventBySlug } from "@/features/event-detail/api/GetEventDetail";
 import Image from "next/image";
@@ -23,6 +23,9 @@ import { FC } from "react";
 import type { Metadata } from "next";
 import Markdown from "@/components/Markdown";
 import { formatDate } from "./../../../lib/formatDate";
+import useGetReviews from "@/hooks/review/useGetreview";
+import ReviewUsers from "./ReviewSection";
+import { getRatingByeventId } from "@/features/event-detail/api/GetRatingEvent";
 
 // This would normally come from a database
 interface DetailEventProps {
@@ -45,6 +48,7 @@ export async function generateMetadata({
 export const DetailPageBody: FC<DetailEventProps> = async ({ slug }) => {
   const event = await getEventBySlug(slug);
   console.log(event.thumbnail);
+  const getRating = await getRatingByeventId(event.id);
 
   // Check if event.seats is empty or undefined, return an empty array if true
   const seats = event.seats && event.seats.length > 0 ? event.seats : [];
@@ -100,14 +104,45 @@ export const DetailPageBody: FC<DetailEventProps> = async ({ slug }) => {
               </div>
 
               <div className="mt-4 flex items-center">
-                <div className="ml-2">
-                  <p className="text-sm font-medium">{event.organizer.name}</p>
-                  <div className="flex items-center">
-                    <Star className="mr-1 h-3 w-3 fill-amber-500 text-amber-500" />
+                <div className="flex items-center">
+                  {/* Check if there's an organizer logo, otherwise show the first letter of the name */}
+                  {event.organizer.profilePicture ? (
+                    <Image
+                      src={event.organizer.profilePicture}
+                      alt={event.organizer.name}
+                      width={40}
+                      height={40}
+                      className="rounded-full"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 bg-gray-200 flex items-center justify-center rounded-full">
+                      <span className="text-xl text-gray-600">
+                        {event.organizer.name[0]}
+                      </span>
+                    </div>
+                  )}
+
+                  <div className="ml-2">
+                    <p className="text-sm font-medium">
+                      {event.organizer.name}
+                    </p>
+                    <div className="flex items-center">
+                      <Star className="mr-1 h-3 w-3 fill-amber-500 text-amber-500" />
+                      {getRating && getRating.rating ? (
+                        <span className="text-sm font-medium text-gray-700">
+                          {getRating.rating.toFixed(1)}
+                        </span>
+                      ) : (
+                        <span className="text-sm font-medium text-gray-700">
+                          No rating yet
+                        </span>
+                      )}
+                      {/* You can show the rating if needed */}
+                    </div>
                   </div>
                 </div>
                 <Link
-                  href={`/organizers/${event.organizer.name}`}
+                  href={`/event/organizers/${event.organizer.name}`}
                   className="ml-auto"
                 >
                   <Button variant="outline" size="sm">
@@ -117,17 +152,21 @@ export const DetailPageBody: FC<DetailEventProps> = async ({ slug }) => {
               </div>
 
               <Tabs defaultValue="details" className="mt-6">
-                <TabsList className="grid w-full grid-cols-2">
+                <TabsList className="grid w-full grid-cols-3">
                   <TabsTrigger value="details">Details</TabsTrigger>
                   <TabsTrigger value="location">Location</TabsTrigger>
+                  <TabsTrigger value="review">Review</TabsTrigger>
                 </TabsList>
+
+                {/* Details Tab */}
                 <TabsContent value="details" className="mt-4 space-y-4">
                   <div className="bg-muted/50 rounded-lg border p-4">
                     <h3 className="font-medium">{event.city.name}</h3>
-
                     <Markdown content={event.content} />
                   </div>
                 </TabsContent>
+
+                {/* Location Tab */}
                 <TabsContent value="location" className="mt-4">
                   <div className="bg-muted/50 rounded-lg border p-4">
                     <h3 className="font-medium">{event.city.name}</h3>
@@ -135,6 +174,10 @@ export const DetailPageBody: FC<DetailEventProps> = async ({ slug }) => {
                       {event.locationDetail}
                     </p>
                   </div>
+                </TabsContent>
+
+                <TabsContent value="review" className="mt-4">
+                  <ReviewUsers eventId={event.id} />
                 </TabsContent>
               </Tabs>
             </div>
@@ -146,7 +189,7 @@ export const DetailPageBody: FC<DetailEventProps> = async ({ slug }) => {
                 <div className="flex items-center text-sm text-muted-foreground"></div>
               </div>
 
-              <TicketSelection tickets={seats} />
+              <TicketSelection tickets={seats} eventId={event.id} />
 
               <div className="mt-4 rounded-md bg-muted p-3">
                 <h4 className="font-medium">Event Policies</h4>
