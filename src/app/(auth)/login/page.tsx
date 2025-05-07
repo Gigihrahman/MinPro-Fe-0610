@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 const Login = async () => {
   const session = await auth();
-  if (session) return redirect("/");
+  if (session?.user.role) return redirect("/");
   return <LoginPage />;
 };
 

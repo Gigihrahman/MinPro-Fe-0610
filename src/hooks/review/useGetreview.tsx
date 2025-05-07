@@ -1,7 +1,7 @@
 import useAxios from "@/hooks/useAxios";
 import { PageableResponse, PaginationQueries } from "@/types/pagination";
 import { Review } from "@/types/review";
-import { Transaction } from "@/types/transactions";
+
 import { useQuery } from "@tanstack/react-query";
 
 const useGetReviews = (eventId: number, queries: PaginationQueries) => {

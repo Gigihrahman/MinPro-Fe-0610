@@ -89,13 +89,6 @@ export default function ProfileForm() {
                   Change Profile
                 </Button>
                 <Button
-                  variant="secondary"
-                  className="flex items-center gap-2"
-                  onClick={() => router.push("/profile/register-organizer")}
-                >
-                  Register as Organizer
-                </Button>
-                <Button
                   variant="outline"
                   className="flex items-center gap-2"
                   onClick={() => router.push("/profile/change-password")}
