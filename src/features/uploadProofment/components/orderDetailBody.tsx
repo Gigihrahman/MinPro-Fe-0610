@@ -1,5 +1,5 @@
 "use client";
-import { ResponseDetailTransaction } from "@/types/transactions";
+import { ResponseDetailTransactionUser } from "@/types/transactions";
 import { useRouter } from "next/navigation";
 import { FC } from "react";
 import TicketDetails from "@/features/usingCode/components/TicketDetail";
@@ -7,7 +7,7 @@ import FileUpload from "@/features/uploadProofment/components/FileUpload";
 import TransactionBadge from "@/components/TransactionBadge";
 
 interface UploadProofmentProps {
-  order: ResponseDetailTransaction;
+  order: ResponseDetailTransactionUser;
   orderId: string;
 }
 

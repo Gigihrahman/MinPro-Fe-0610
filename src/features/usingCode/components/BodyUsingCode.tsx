@@ -1,4 +1,4 @@
-import { ResponseDetailTransaction } from "@/types/transactions";
+import { ResponseDetailTransactionUser } from "@/types/transactions";
 
 import { FC, useState } from "react";
 import PaymentSummary from "./PaymentSummary";
@@ -6,7 +6,7 @@ import TicketDetails from "./TicketDetail";
 import useApplyVoucher from "@/hooks/transaction/useApplyCode";
 import TransactionBadge from "@/components/TransactionBadge";
 interface OrderDetailPageProps {
-  order: ResponseDetailTransaction | null;
+  order: ResponseDetailTransactionUser | null;
   orderId: string;
 }
 

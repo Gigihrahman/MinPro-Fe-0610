@@ -1,5 +1,5 @@
-import Navbar from "@/components/Navbar";
 // import { SideBarApp } from "@/components/SideBarApp";
+import Navbar from "@/components/NavbarHomePage";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "sonner";
@@ -26,7 +26,7 @@ export default function Dashboard({
 }>) {
   return (
     <div className="...">
-      {/* <Navbar /> */}
+      <Navbar />
       {children}
     </div>
   );

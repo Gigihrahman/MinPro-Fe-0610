@@ -22,6 +22,7 @@ const useCreateTransaction = () => {
   return useMutation({
     mutationFn: async (payload: transactionPayload) => {
       const { data } = await axiosInstance.post(`/transactions`, payload);
+      console.log(payload)
       return data;
     },
     onSuccess: (data) => {
