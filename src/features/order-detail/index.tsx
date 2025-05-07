@@ -12,6 +12,7 @@ interface OrderDetailPageProps {
 const OrderDetailPage: FC<OrderDetailPageProps> = ({ uuid }) => {
   const { data } = useGetDetailTransactionUser(uuid);
   const router = useRouter();
+ 
 
   useEffect(() => {
     if (!data) return;

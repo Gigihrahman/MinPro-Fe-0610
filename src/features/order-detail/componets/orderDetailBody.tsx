@@ -1,48 +1,39 @@
 "use client";
 import TransactionBadge from "@/components/TransactionBadge";
 import TicketDetails from "@/features/usingCode/components/TicketDetail";
-import { ResponseDetailTransaction } from "@/types/transactions";
+import { ResponseDetailTransactionUser } from "@/types/transactions";
 import { useRouter } from "next/navigation";
 import { FC } from "react";
+import { formatDate } from "@/lib/formatDate";
 
 interface OrderDetailPageProps {
-  order: ResponseDetailTransaction;
+  order: ResponseDetailTransactionUser;
   orderId: string;
 }
 
 const OrderDetailPageCode: FC<OrderDetailPageProps> = ({ order, orderId }) => {
   const router = useRouter();
+  console.log("ini order",order)
 
-  // Calculate total price (before any discounts)
   const totalPrice = order.detailTransaction.reduce(
     (total, transaction) =>
       total + transaction.priceAtPurchase * transaction.quantity,
     0
   );
 
-  // Calculate final price after subtracting voucher, coupon, and used points
   const finalPrice =
     totalPrice -
     (order.voucher_amount + order.coupoun_amount + order.usedPoint);
 
-  // Ensure the final price is at least 1 (can't be zero or negative)
   const finalAmount = Math.max(finalPrice, 1);
 
-  // Format date
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("id-ID", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+  const formatCurrencyOrZero = (value: number | null | undefined) => {
+    if (value == null) return "Rp 0";
+    return `Rp ${value.toLocaleString("id-ID")}`;
   };
 
-  // Helper function to format a value, and return 0 if it's undefined or null
-  const formatCurrencyOrZero = (value: number | null | undefined) => {
-    if (value == null) return "Rp 0"; // If value is null or undefined, return Rp 0
-    return `Rp ${value.toLocaleString("id-ID")}`;
+  const handleReviewButtonClick = () => {
+    router.push(`/review/${orderId}`);
   };
 
   return (
@@ -94,6 +85,17 @@ const OrderDetailPageCode: FC<OrderDetailPageProps> = ({ order, orderId }) => {
                 </span>
               </div>
             </div>
+
+            {order.status === "DONE" &&
+              order.event?.endEvent &&
+              new Date(order.event.endEvent) < new Date() && (
+                <button
+                  onClick={handleReviewButtonClick}
+                  className="mt-4 w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700"
+                >
+                  Tulis Review
+                </button>
+              )}
           </div>
         </div>
 
@@ -140,6 +142,17 @@ const OrderDetailPageCode: FC<OrderDetailPageProps> = ({ order, orderId }) => {
                 </div>
               </div>
             </div>
+            {/* Review Button */}
+            {order.status === "DONE" &&
+              order.event?.endEvent &&
+              new Date(order.event.endEvent) < new Date() && (
+                <button
+                  onClick={handleReviewButtonClick}
+                  className="mt-4 w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700"
+                >
+                  Tulis Review
+                </button>
+              )}
           </div>
         </div>
       </div>

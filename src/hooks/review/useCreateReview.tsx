@@ -12,7 +12,7 @@ interface CreateVoucherPayload {
   rating: number;
 }
 
-const useCreateVoucher = (uuid: string) => {
+const useCreateReview = (uuid: string) => {
   const { axiosInstance } = useAxios();
   const router = useRouter();
 
@@ -22,15 +22,15 @@ const useCreateVoucher = (uuid: string) => {
       return data;
     },
     onSuccess: () => {
-      toast.success("Create Seat successfully");
+      toast.success("Create Review successfully");
       router.push("/");
       router.refresh();
     },
     onError: (error: AxiosError<any>) => {
-      toast.error(error.response?.data.message || "Failed to update profile");
+      toast.error(error.response?.data.message || "Failed to create review");
       console.log(error.response?.data.message);
     },
   });
 };
 
-export default useCreateVoucher;
+export default useCreateReview;

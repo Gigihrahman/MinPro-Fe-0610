@@ -1,11 +1,6 @@
 import EventCard from "@/components/EventCard";
-import { Button } from "@/components/ui/button";
-import { GetEvents } from "@/features/home/api/GetEvent";
 import { Event } from "@/types/event";
-import Link from "next/link";
-import React, { FC } from "react";
-
-import { event } from "./../../event-detail/components/Dummy";
+import { FC } from "react";
 
 interface EventListProps {
   events: Event[];

@@ -1,8 +1,7 @@
 import { GetEvents } from "@/features/home/api/GetEvent";
+import { Suspense } from "react";
 import EventList from "./components/EventList";
 import Jumbotron from "./components/Jumbotron";
-import { Suspense } from "react";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import Navbar from "@/components/NavbarHomePage";
 
 const HomePage = async () => {
@@ -11,8 +10,8 @@ const HomePage = async () => {
 
   return (
     <>
-      <Navbar />
       <main className="container mx-auto flex-1">
+        <Navbar />
         <Jumbotron />
         <Suspense fallback={<div>Loading...</div>}>
           <EventList events={eventData} />

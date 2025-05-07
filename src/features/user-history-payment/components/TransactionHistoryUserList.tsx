@@ -39,7 +39,9 @@ const TransactionHistoryUserList = () => {
     take: 2,
     status: statusFilter,
   });
-
+  console.log(transactions)
+  console.log("transactions", transactions);
+  
   return (
     <div>
       <div className="container mx-auto p-4 max-w-6xl">
