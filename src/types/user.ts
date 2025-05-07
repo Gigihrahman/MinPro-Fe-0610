@@ -6,5 +6,6 @@ export interface User {
   confirmPassword: string;
   referralCodeUsed: string;
   password: string;
-  role:string
+  role: string;
+  profilePicture: string;
 }

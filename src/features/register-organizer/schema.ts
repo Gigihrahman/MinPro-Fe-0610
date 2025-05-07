@@ -16,7 +16,6 @@ export const RegisterOrganizerSchema = Yup.object({
     .required("Phone number is required"),
   npwp: Yup.string().required("NPWP is required"),
   norek: Yup.string()
-    .matches(/^\d+$/, "Must be a number")
     .required("No. Rekening is required"),
   bankName: Yup.string()
     .oneOf(["BCA", "BRI", "BNI"], "Invalid bank")

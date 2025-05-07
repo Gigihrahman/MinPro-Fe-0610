@@ -7,7 +7,7 @@ export interface Organizer {
   profilePicture?: string;
   confirmPassword: string;
   npwp: string;
-  norek: number;
+  norek: string;
   referralCodeUsed?: string;
   bankName: "BCA" | "BRI" | "BNI";
 }

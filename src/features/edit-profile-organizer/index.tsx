@@ -1,9 +1,8 @@
-import React from 'react'
+import React from "react";
+import EditOrganizerProfileForm from "./components/EditProfileOrganizerForm";
 
 const EditProfileOrganizerPage = () => {
-  return (
-    <div>EditProfilePage</div>
-  )
-}
+  return <EditOrganizerProfileForm />;
+};
 
-export default EditProfileOrganizerPage
+export default EditProfileOrganizerPage;

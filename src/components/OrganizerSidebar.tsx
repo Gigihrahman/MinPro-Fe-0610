@@ -23,6 +23,8 @@ import {
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
+import { format, isToday, isTomorrow, parseISO } from "date-fns";
+import useGetEventByOrganizer from "@/hooks/event/useGetEventByOrganizer";
 
 // Custom hook for getting user profile (you need to implement this)
 const useGetProfile = () => {
@@ -82,6 +84,18 @@ interface NavItem {
   badge?: number | null;
 }
 
+// Helper function to format event date
+const formatEventDate = (dateString: string): string => {
+  const date = parseISO(dateString);
+  if (isToday(date)) {
+    return `Today, ${format(date, "h:mm a")}`;
+  } else if (isTomorrow(date)) {
+    return `Tomorrow, ${format(date, "h:mm a")}`;
+  } else {
+    return format(date, "MMM d, h:mm a");
+  }
+};
+
 export default function OrganizerSidebar({
   isOpen,
   setIsOpen,
@@ -96,6 +110,28 @@ export default function OrganizerSidebar({
   const [openItems, setOpenItems] = useState<Record<string, boolean>>({});
   const [mounted, setMounted] = useState(false);
   const [showLogout, setShowLogout] = useState(false);
+
+  // Get upcoming events from API, sorted by closest date
+  const { data: eventsData, isLoading: eventsLoading } = useGetEventByOrganizer(
+    {
+      take: 5,
+      order: "asc", // Ascending order by date (closest first)
+    }
+  );
+
+  // Filter and sort upcoming events
+  const upcomingEvents = eventsData?.data
+    ?.filter((event) => {
+      const eventDate = parseISO(event.startEvent);
+      return eventDate >= new Date(); // Only include future events
+    })
+    .sort((a, b) => {
+      // Sort by closest date first
+      return (
+        new Date(a.startEvent).getTime() - new Date(b.startEvent).getTime()
+      );
+    })
+    .slice(0, 2); // Take only the first 2 upcoming events
 
   useEffect(() => {
     setMounted(true);
@@ -116,17 +152,16 @@ export default function OrganizerSidebar({
       active: pathname?.includes("/organizer/transactions"),
       subItems: [
         {
+          label: "Confirmation Payments",
+          href: "/organizer/confirmation-payments",
+          active: pathname === "/organizer/confirmation-payments",
+        },
+        {
           label: "All Transactions",
           href: "/organizer/all-transactions",
           active: pathname === "/organizer/all-transactions",
         },
-        {
-          label: "Manual Payments",
-          href: "/organizer/manual-payments",
-          active: pathname === "/organizer/manual-payments",
-        },
       ],
-      badge: 5,
     },
     {
       icon: Calendar,
@@ -138,48 +173,11 @@ export default function OrganizerSidebar({
           label: "All Events",
           href: "/organizer/all-events",
           active: pathname === "/organizer/all-events",
-          badge: 12,
         },
         {
           label: "Create Event",
           href: "/organizer/create-event",
           active: pathname === "/organizer/create-event",
-        },
-      ],
-    },
-    {
-      icon: Ticket,
-      label: "Tickets",
-      href: "#",
-      active: pathname?.includes("/organizer/tickets"),
-      subItems: [
-        {
-          label: "Manage Tickets",
-          href: "/organizer/tickets",
-          active: pathname === "/organizer/tickets",
-        },
-        {
-          label: "Create Tickets",
-          href: "/organizer/tickets/create",
-          active: pathname === "/organizer/tickets/create",
-        },
-      ],
-    },
-    {
-      icon: Tag,
-      label: "Vouchers",
-      href: "#",
-      active: pathname?.includes("/organizer/vouchers"),
-      subItems: [
-        {
-          label: "All Vouchers",
-          href: "/organizer/all-vouchers",
-          active: pathname === "/organizer/all-vouchers",
-        },
-        {
-          label: "Create Vouchers",
-          href: "/organizer/vouchers/create",
-          active: pathname === "/organizer/vouchers/create",
         },
       ],
     },
@@ -295,35 +293,75 @@ export default function OrganizerSidebar({
                 Upcoming Events
               </h3>
               <Link
-                href="/organizer/events"
+                href="/organizer/all-events"
                 className="text-xs text-purple-600 hover:text-purple-800 flex items-center gap-1"
               >
                 View all <ChevronRight className="h-3 w-3" />
               </Link>
             </div>
             <div className="space-y-2">
-              <div className="flex items-start gap-2 p-2 rounded-md bg-white/80 shadow-sm">
-                <div className="p-1.5 bg-purple-100 rounded-md">
-                  <Clock className="h-3 w-3 text-purple-600" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-medium text-gray-800 truncate">
-                    Summer Music Festival
+              {eventsLoading ? (
+                // Loading state
+                <>
+                  <div className="flex items-start gap-2 p-2 rounded-md bg-white/80 shadow-sm animate-pulse">
+                    <div className="p-1.5 bg-purple-100 rounded-md">
+                      <div className="h-3 w-3 bg-purple-200 rounded-full"></div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="h-3 w-3/4 bg-purple-200 rounded-full mb-1"></div>
+                      <div className="h-2 w-1/2 bg-purple-200 rounded-full"></div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2 p-2 rounded-md bg-white/80 shadow-sm animate-pulse">
+                    <div className="p-1.5 bg-purple-100 rounded-md">
+                      <div className="h-3 w-3 bg-purple-200 rounded-full"></div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="h-3 w-3/4 bg-purple-200 rounded-full mb-1"></div>
+                      <div className="h-2 w-1/2 bg-purple-200 rounded-full"></div>
+                    </div>
+                  </div>
+                </>
+              ) : upcomingEvents && upcomingEvents.length > 0 ? (
+                // Render actual events
+                upcomingEvents.map((event, index) => (
+                  <Link
+                    href={`/organizer/events/${event.id}`}
+                    key={event.id}
+                    className="block"
+                  >
+                    <div className="flex items-start gap-2 p-2 rounded-md bg-white/80 shadow-sm hover:bg-white hover:shadow-md transition-all">
+                      <div className="p-1.5 bg-purple-100 rounded-md">
+                        {index === 0 ? (
+                          <Clock className="h-3 w-3 text-purple-600" />
+                        ) : (
+                          <Star className="h-3 w-3 text-purple-600" />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-medium text-gray-800 truncate">
+                          {event.name}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {formatEventDate(event.startEvent)}
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                ))
+              ) : (
+                // Fallback for no events
+                <div className="p-2 rounded-md bg-white/80 shadow-sm">
+                  <p className="text-xs text-center text-gray-500">
+                    No upcoming events
                   </p>
-                  <p className="text-xs text-gray-500">Today, 7:00 PM</p>
+                  <Link href="/organizer/create-event" className="block">
+                    <p className="text-xs text-center text-purple-600 hover:text-purple-800 mt-1">
+                      Create your first event
+                    </p>
+                  </Link>
                 </div>
-              </div>
-              <div className="flex items-start gap-2 p-2 rounded-md bg-white/80 shadow-sm">
-                <div className="p-1.5 bg-purple-100 rounded-md">
-                  <Star className="h-3 w-3 text-purple-600" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-medium text-gray-800 truncate">
-                    Tech Conference 2025
-                  </p>
-                  <p className="text-xs text-gray-500">Tomorrow, 9:00 AM</p>
-                </div>
-              </div>
+              )}
             </div>
           </div>
 

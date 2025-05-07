@@ -57,8 +57,7 @@ const useCreateEvent = () => {
       }
 
       try {
-        const { data } = await axiosInstance.post("/events", createEventForm);
-        console.log("ini data atas :", data);
+        const { data } = await axiosInstance.post("/events/create", createEventForm);
 
         return data;
       } catch (error) {
@@ -73,14 +72,14 @@ const useCreateEvent = () => {
     },
 
     onSuccess: (data) => {
-      console.log("ini data bawah: ", data);
-
       toast.success("Event berhasil dibuat");
       queryClient.invalidateQueries({ queryKey: ["events"] });
-      router.push(`/organizer/${data.slug}/create-seat/`);
+      router.push(`/organizer/dashboard-organizer`);
     },
 
     onError: (error: any) => {
+      console.log("ini error :", error);
+
       if (error instanceof Error) {
         toast.error(error.message);
       } else if (error instanceof AxiosError && error.response?.data?.message) {

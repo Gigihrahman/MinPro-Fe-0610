@@ -41,7 +41,7 @@ export default function OrganizerProfile() {
   };
 
   const navigateToEditProfile = () => {
-    router.push("/organizer/edit-profile");
+    router.push("/organizer/profile/edit-profile");
   };
 
   const navigateToChangePassword = () => {

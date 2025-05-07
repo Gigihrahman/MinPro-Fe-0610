@@ -7,7 +7,6 @@ const EventDetail = async ({
   params: Promise<{ slug: string }>;
 }) => {
   const slug = (await params).slug;
-  console.log("slug", slug);
   return <EventDetailPage slug={slug} />;
 };
 

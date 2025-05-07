@@ -1,8 +1,8 @@
 import React from "react";
-import AllTransactionsTable from "./components/TransactionsTable";
+import AllTransactions from "./components/AllTransactions";
 
 const AllTransactionsPage = () => {
-  return <AllTransactionsTable />;
+  return <AllTransactions />;
 };
 
 export default AllTransactionsPage;

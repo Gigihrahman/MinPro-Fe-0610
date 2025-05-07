@@ -390,6 +390,7 @@ const CreateEventPage = () => {
                   ) : (
                     <button
                       type="submit"
+                      onClick={() => (formik.submitForm())}
                       disabled={isPending}
                       className={`px-8 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg text-white font-medium hover:from-purple-500 hover:to-indigo-500 transition-all duration-200 shadow-lg hover:shadow-purple-700/50 ${
                         isPending ? "opacity-70 cursor-not-allowed" : ""
