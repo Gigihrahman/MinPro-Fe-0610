@@ -1,7 +1,7 @@
 import { Event } from "@/types/event";
 import { Seat } from "@/types/seats";
 
-export interface Transaction {
+export interface TransactionUser {
   uuid: string;
   status: string;
   totalPrice: number;
