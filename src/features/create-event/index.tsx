@@ -59,6 +59,7 @@ const CreateEventPage = () => {
     },
     validationSchema: createEventSchema,
     onSubmit: async (values) => {
+      console.log("Form values:", values);
       createEvent({
         ...values,
         thumbnail,
@@ -99,7 +100,7 @@ const CreateEventPage = () => {
             <ArrowLeft className="h-5 w-5" />
             <span>Kembali ke Dashboard</span>
           </Link>
-          
+
           <div className="text-right">
             <h2 className="text-xl font-semibold tracking-tight text-white">
               EventHub Organizer
@@ -116,7 +117,8 @@ const CreateEventPage = () => {
             Buat Event Baru
           </h1>
           <p className="text-center mb-8 text-purple-200 max-w-2xl mx-auto">
-            Isi form berikut untuk membuat event baru dan bagikan dengan pengunjung Anda
+            Isi form berikut untuk membuat event baru dan bagikan dengan
+            pengunjung Anda
           </p>
 
           {/* Progress bar */}
@@ -187,11 +189,12 @@ const CreateEventPage = () => {
                         }
                         name="categoryId"
                       />
-                      {formik.errors.categoryId && formik.touched.categoryId && (
-                        <div className="mt-2 text-sm text-red-300 bg-red-900/30 py-1 px-2 rounded">
-                          {formik.errors.categoryId}
-                        </div>
-                      )}
+                      {formik.errors.categoryId &&
+                        formik.touched.categoryId && (
+                          <div className="mt-2 text-sm text-red-300 bg-red-900/30 py-1 px-2 rounded">
+                            {formik.errors.categoryId}
+                          </div>
+                        )}
                     </div>
 
                     <div>
@@ -200,11 +203,12 @@ const CreateEventPage = () => {
                         onChange={formik.handleChange}
                         name="description"
                       />
-                      {formik.errors.description && formik.touched.description && (
-                        <div className="mt-2 text-sm text-red-300 bg-red-900/30 py-1 px-2 rounded">
-                          {formik.errors.description}
-                        </div>
-                      )}
+                      {formik.errors.description &&
+                        formik.touched.description && (
+                          <div className="mt-2 text-sm text-red-300 bg-red-900/30 py-1 px-2 rounded">
+                            {formik.errors.description}
+                          </div>
+                        )}
                     </div>
                   </div>
                 </div>
@@ -232,11 +236,12 @@ const CreateEventPage = () => {
                             formik.setFieldValue("startEvent", newDate)
                           }
                         />
-                        {formik.errors.startEvent && formik.touched.startEvent && (
-                          <div className="mt-2 text-sm text-red-300 bg-red-900/30 py-1 px-2 rounded">
-                            {formik.errors.startEvent}
-                          </div>
-                        )}
+                        {formik.errors.startEvent &&
+                          formik.touched.startEvent && (
+                            <div className="mt-2 text-sm text-red-300 bg-red-900/30 py-1 px-2 rounded">
+                              {formik.errors.startEvent}
+                            </div>
+                          )}
                       </div>
 
                       <div>
@@ -258,7 +263,9 @@ const CreateEventPage = () => {
                     <div>
                       <SelectCity
                         value={formik.values.cityId}
-                        onChange={(value) => formik.setFieldValue("cityId", value)}
+                        onChange={(value) =>
+                          formik.setFieldValue("cityId", value)
+                        }
                         city={city ? city : []}
                         name="cityId"
                       />
@@ -275,11 +282,12 @@ const CreateEventPage = () => {
                         onChange={formik.handleChange}
                         name="locationDetail"
                       />
-                      {formik.errors.locationDetail && formik.touched.locationDetail && (
-                        <div className="mt-2 text-sm text-red-300 bg-red-900/30 py-1 px-2 rounded">
-                          {formik.errors.locationDetail}
-                        </div>
-                      )}
+                      {formik.errors.locationDetail &&
+                        formik.touched.locationDetail && (
+                          <div className="mt-2 text-sm text-red-300 bg-red-900/30 py-1 px-2 rounded">
+                            {formik.errors.locationDetail}
+                          </div>
+                        )}
                     </div>
                   </div>
                 </div>
@@ -337,20 +345,23 @@ const CreateEventPage = () => {
                   />
 
                   {/* Form validation errors summary */}
-                  {Object.keys(formik.errors).length > 0 && formik.submitCount > 0 && (
-                    <div className="mt-8 p-4 bg-red-900/30 text-red-300 rounded-lg">
-                      <p className="font-medium mb-2">
-                        Form belum dapat dikirim karena ada error:
-                      </p>
-                      <ul className="list-disc ml-5">
-                        {Object.entries(formik.errors).map(([field, message]) => (
-                          <li key={field}>
-                            {field}: {message}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+                  {Object.keys(formik.errors).length > 0 &&
+                    formik.submitCount > 0 && (
+                      <div className="mt-8 p-4 bg-red-900/30 text-red-300 rounded-lg">
+                        <p className="font-medium mb-2">
+                          Form belum dapat dikirim karena ada error:
+                        </p>
+                        <ul className="list-disc ml-5">
+                          {Object.entries(formik.errors).map(
+                            ([field, message]) => (
+                              <li key={field}>
+                                {field}: {message}
+                              </li>
+                            )
+                          )}
+                        </ul>
+                      </div>
+                    )}
                 </div>
               )}
 
@@ -391,6 +402,7 @@ const CreateEventPage = () => {
                     <button
                       type="submit"
                       disabled={isPending}
+                      onClick={() => formik.submitForm()}
                       className={`px-8 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg text-white font-medium hover:from-purple-500 hover:to-indigo-500 transition-all duration-200 shadow-lg hover:shadow-purple-700/50 ${
                         isPending ? "opacity-70 cursor-not-allowed" : ""
                       }`}

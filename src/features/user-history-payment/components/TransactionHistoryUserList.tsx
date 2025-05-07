@@ -39,7 +39,8 @@ const TransactionHistoryUserList = () => {
     take: 2,
     status: statusFilter,
   });
-
+  console.log("transactions", transactions);
+  console.log("transactions", transactions?.data[0].event.thumbnail);
   return (
     <div>
       <div className="container mx-auto p-4 max-w-6xl">
