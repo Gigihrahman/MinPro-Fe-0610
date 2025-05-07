@@ -8,7 +8,6 @@ export const GetEvents = async () => {
     const { data, status } = await axiosInstance.get<PageableResponse<Event>>(
       "/events?take=8"
     );
-    console.log("ini data", data);
     if (status !== 200 || !data) {
       return [];
     }

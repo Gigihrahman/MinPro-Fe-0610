@@ -3,7 +3,7 @@
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Menu, Calendar, Bell, Search } from "lucide-react";
+import { Menu } from "lucide-react";
 import { useState } from "react";
 
 const Navbar = () => {
@@ -25,7 +25,6 @@ const Navbar = () => {
             <Link href="/" className="flex items-center gap-2">
               <div className="relative flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-pink-500 text-white">
                 <span className="font-bold">E</span>
-                <span className="absolute -right-1 -top-1 flex h-3 w-3 items-center justify-center rounded-full bg-green-500"></span>
               </div>
               <span className="font-semibold text-lg bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent">
                 EventHub
@@ -33,30 +32,8 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Center section - Search bar */}
-          <div className="hidden md:flex flex-1 max-w-md mx-4">
-            <div className="relative w-full">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <Search className="h-4 w-4 text-gray-400" />
-              </div>
-              <input
-                type="text"
-                className="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-full w-full pl-10 p-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                placeholder="Search events..."
-              />
-            </div>
-          </div>
-
           {/* Right section */}
           <div className="flex items-center gap-2">
-            <button className="p-2 rounded-full hover:bg-purple-100 relative hidden md:flex">
-              <Calendar className="h-5 w-5 text-purple-700" />
-            </button>
-            <button className="p-2 rounded-full hover:bg-purple-100 relative hidden md:flex">
-              <Bell className="h-5 w-5 text-purple-700" />
-              <span className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"></span>
-            </button>
-
             {/* Desktop navigation */}
             <div className="hidden md:flex items-center gap-4 ml-4">
               <Link
@@ -73,7 +50,6 @@ const Navbar = () => {
                   Profile
                 </Link>
               )}
-              {/* Add the new button for the Transaction page */}
               {!!session.data?.user && (
                 <Link
                   href="/transaction"
@@ -157,20 +133,6 @@ const Navbar = () => {
                   Logout
                 </button>
               )}
-            </div>
-
-            {/* Mobile search */}
-            <div className="mt-4 px-2">
-              <div className="relative w-full">
-                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                  <Search className="h-4 w-4 text-gray-400" />
-                </div>
-                <input
-                  type="text"
-                  className="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-full w-full pl-10 p-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  placeholder="Search events..."
-                />
-              </div>
             </div>
           </div>
         )}

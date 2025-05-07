@@ -1,18 +1,19 @@
 "use client";
 import TransactionBadge from "@/components/TransactionBadge";
 import TicketDetails from "@/features/usingCode/components/TicketDetail";
-import { ResponseDetailTransaction } from "@/types/transactions";
+import { ResponseDetailTransactionUser } from "@/types/transactions";
 import { useRouter } from "next/navigation";
 import { FC } from "react";
 import { formatDate } from "@/lib/formatDate";
 
 interface OrderDetailPageProps {
-  order: ResponseDetailTransaction;
+  order: ResponseDetailTransactionUser;
   orderId: string;
 }
 
 const OrderDetailPageCode: FC<OrderDetailPageProps> = ({ order, orderId }) => {
   const router = useRouter();
+  console.log("ini order",order)
 
   const totalPrice = order.detailTransaction.reduce(
     (total, transaction) =>

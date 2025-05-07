@@ -1,5 +1,5 @@
 import useAxios from "@/hooks/useAxios";
-import { ResponseDetailTransaction } from "@/types/transactions";
+import { ResponseDetailTransactionUser } from "@/types/transactions";
 import { useQuery } from "@tanstack/react-query";
 
 const useGetDetailTransactionUser = (uuid: string) => {
@@ -8,7 +8,7 @@ const useGetDetailTransactionUser = (uuid: string) => {
     queryKey: ["transaction", uuid],
     queryFn: async () => {
       console.log("uuid", uuid);
-      const { data } = await axiosInstance.get<ResponseDetailTransaction>(
+      const { data } = await axiosInstance.get<ResponseDetailTransactionUser>(
         `/transactions/${uuid}`
       );
       console.log("data", data);

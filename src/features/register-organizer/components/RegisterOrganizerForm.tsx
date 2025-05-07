@@ -48,11 +48,9 @@ export default function RegisterOrganizerForm() {
     validationSchema: RegisterOrganizerSchema,
     onSubmit: async (values) => {
       const { confirmPassword, ...payload } = values;
-      const rest = {
-        ...payload,
-        norek: Number(payload.norek),
-      };
-      await register(rest);
+      console.log("ini values: ", values);
+
+      await register(payload);
     },
   });
 
@@ -222,10 +220,11 @@ export default function RegisterOrganizerForm() {
                   <Label htmlFor="norek" className="text-sm font-medium">
                     Account Number
                   </Label>
+
                   <Input
                     id="norek"
                     name="norek"
-                    type="number"
+                    type="text"
                     value={formik.values.norek}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}

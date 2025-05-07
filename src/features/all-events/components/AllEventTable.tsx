@@ -138,8 +138,6 @@ export default function ImprovedAllEventsTable() {
     order: sortOrder,
   });
 
-  console.log("ini data events :", events);
-
   // Handle select all rows
   useEffect(() => {
     if (isSelectAll && events?.data) {
@@ -591,24 +589,24 @@ export default function ImprovedAllEventsTable() {
                               <DropdownMenuItem
                                 onClick={() =>
                                   router.push(
-                                    `/organizer/${event.slug}/create-seat/`
+                                    `/organizer/create-seat/${event.slug}`
                                   )
                                 }
                                 className="cursor-pointer flex items-center"
                               >
                                 <Settings className="mr-2 h-4 w-4 text-purple-600" />
-                                Edit Seating
+                                Create Seating
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 onClick={() =>
                                   router.push(
-                                    `/organizer/${event.slug}/participants/`
+                                    `/organizer/create-voucher/${event.slug}`
                                   )
                                 }
                                 className="cursor-pointer flex items-center"
                               >
                                 <Users className="mr-2 h-4 w-4 text-purple-600" />
-                                Participants
+                                Create Voucher
                               </DropdownMenuItem>
                             </DropdownMenuGroup>
                             <DropdownMenuSeparator />
@@ -700,21 +698,21 @@ export default function ImprovedAllEventsTable() {
                       <DropdownMenuContent align="end" className="w-48">
                         <DropdownMenuItem
                           onClick={() =>
-                            router.push(`/organizer/${event.slug}/create-seat/`)
+                            router.push(`/organizer/create-seat/${event.slug}`)
                           }
                           className="cursor-pointer"
                         >
-                          Edit Seating
+                          Create Seating
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={() =>
                             router.push(
-                              `/organizer/${event.slug}/participants/`
+                              `/organizer/create-voucher/${event.slug}`
                             )
                           }
                           className="cursor-pointer"
                         >
-                          Participants
+                          Create Voucher
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem

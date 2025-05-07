@@ -14,10 +14,12 @@ const useRegisterOrganizer = () => {
     mutationFn: async (
       payload: Omit<Organizer, "id" | "confirmPassword" | "BankName">
     ) => {
+      console.log("asdasdasda: ", payload);
       const { data } = await axiosInstance.post(
         "/auth/register-organizer",
         payload
       );
+
       return data;
     },
     onSuccess: () => {

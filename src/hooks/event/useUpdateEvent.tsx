@@ -68,7 +68,7 @@ const useUpdateEvent = (id?: number) => {
             `/events/${id}`,
             UpdateEventForm
           );
-          console.log("ini data atas :", data);
+
           return data;
         }
       } catch (error) {
@@ -81,7 +81,6 @@ const useUpdateEvent = (id?: number) => {
       }
     },
     onSuccess: (data) => {
-      console.log("ini data bawah: ", data);
       toast.success("Event berhasil diupdate");
       queryClient.invalidateQueries({ queryKey: ["events"] });
       router.push(`/organizer/dashboard-organizer`);

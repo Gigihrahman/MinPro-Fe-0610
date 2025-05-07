@@ -26,7 +26,8 @@ export function RegisterForm({
   const { mutateAsync: register, isPending } = useRegister();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
+  console.log("ini mutate: ",register);
+  
   const formik = useFormik({
     initialValues: {
       fullName: "",
@@ -257,7 +258,7 @@ export function RegisterForm({
               
               <div className="text-center text-sm">
                 <Link
-                  href="/organizer/register-organizer"
+                  href="/register-organizer"
                   className="text-purple-600 hover:text-purple-800 font-medium"
                 >
                   Register as event organizer

@@ -15,7 +15,7 @@ const useGetTransactions = (queries?: useGetTransactionsQuery) => {
     queryFn: async () => {
       const token = localStorage.getItem("accessToken");
       const { data } = await axiosInstance.get<PageableResponse<Transaction>>(
-        "/transactions",
+        "/transactions/all-transactions",
         {
           headers: {
             Authorization: `Bearer ${token}`,

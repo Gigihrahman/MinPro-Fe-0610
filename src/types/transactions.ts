@@ -24,7 +24,7 @@ export interface DetailTransaction {
   updatedAt: string;
   seats: Seat;
 }
-export interface ResponseDetailTransaction {
+export interface ResponseDetailTransactionUser {
   uuid: string;
   status: string;
   totalPrice: number;

@@ -13,7 +13,7 @@ const useGetTransactionUser = (queries: GetTransactionQuery) => {
     queryFn: async () => {
       const { data } = await axiosInstance.get<
         PageableResponse<TransactionUser>
-      >("/transactions/user", {
+      >("/transactions/", {
         params: {
           page: queries?.page,
           take: queries?.take,
